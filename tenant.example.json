@@ -1,0 +1,81 @@
+{
+  "meta": {
+    "title": "Acme Bank | Mobile App",
+    "description": "The official Acme Bank mobile app — secure, convenient digital banking."
+  },
+
+  "brand": {
+    "name": "Acme Bank, Inc.",
+    "shortName": "AB",
+    "tagline": "Your money, simplified",
+    "location": "Metro City, Country",
+    "logoUrl": "https://YOUR_BUCKET.s3.amazonaws.com/acme/logo.png"
+  },
+
+  "hero": {
+    "badge": "Official Mobile App",
+    "headlineLead": "Bank Smarter with",
+    "headlineAccent": "Acme Mobile",
+    "subhead": "Secure, convenient, and fully digital banking — anywhere, anytime, 24/7.",
+    "pills": [
+      { "label": "Secure Login" },
+      { "label": "Instant Transfers" },
+      { "label": "24/7 Access" },
+      { "label": "Account Management" }
+    ]
+  },
+
+  "features": {
+    "label": "What You Can Do",
+    "heading": "Everything You Need, Right in Your Phone",
+    "intro": "Manage your finances with confidence using the full suite of digital tools in the Acme Mobile app.",
+    "items": [
+      { "title": "Secure Authentication", "body": "Log in safely using your PIN, biometrics, or two-factor authentication." },
+      { "title": "Fund Transfers",        "body": "Transfer funds instantly to other accounts or external banks — fast and reliable." },
+      { "title": "Account Overview",      "body": "View balances, transaction history, and e-statements anytime, anywhere." },
+      { "title": "Bills Payment",         "body": "Pay utility bills and other obligations directly through the app." },
+      { "title": "24/7 Support",          "body": "Access in-app support, FAQs, and direct contact channels day or night." },
+      { "title": "Trusted Security",      "body": "Bank-grade security and regulatory compliance keep your deposits protected." }
+    ]
+  },
+
+  "support": {
+    "label": "App Support & Contact",
+    "heading": "We're Here to Help",
+    "intro": "For any questions, concerns, or technical issues with the app, reach out through any channel below.",
+    "email": "support@acmebank.com",
+    "emailHref": "mailto:support@acmebank.com",
+    "phone": "(02) 8123-4567",
+    "phoneHref": "tel:+63281234567",
+    "address": "123 Main Street, Metro City, Country",
+    "hours": "Mon – Fri: 8:00 AM – 5:00 PM",
+    "hoursNote": "Saturdays and holidays may vary"
+  },
+
+  "privacy": {
+    "label": "Legal & Data Privacy",
+    "heading": "Privacy Policy",
+    "intro": "Acme Bank is committed to protecting the privacy and security of all information you share with us.",
+    "fullPolicyUrl": "https://acmebank.com/privacy"
+  },
+
+  "links": {
+    "androidUrl": "https://play.google.com/store/apps/details?id=com.acmebank.app"
+  },
+
+  "footer": {
+    "trustBadge": "Member ABC • Deposits Insured"
+  },
+
+  "tokens": {
+    "color-primary": "#0b1f5c",
+    "color-primary-mid": "#1535a0",
+    "color-accent": "#f5c400",
+    "color-accent-lt": "#ffe066",
+    "color-highlight": "#2ec4da",
+
+    "hero-to": "#1a4fc8",
+    "btn-primary-bg": "#0b1f5c",
+    "card-accent": "#f5c400"
+  }
+}

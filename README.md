@@ -13,6 +13,27 @@ contact details — all driven by data.
 └── README.md
 ```
 
+> ## ⚠️ TEMPORARY DEMO MODE — REMOVE BEFORE PRODUCTION
+>
+> `functions/_middleware.js` currently ships with **hardcoded sample tenants**
+> and an **on-page switcher**, purely to show the concept working on the default
+> `*.pages.dev` domain. **This is throwaway test code — not for production.**
+>
+> **Try it (after deploy):**
+> - `/` → default template + a floating **DEMO TENANT** switcher bar
+> - `/?tenant=northwind` → blue / amber "Northwind Bank"
+> - `/?tenant=verdant` → green "Verdant Credit Union"
+> - `/?tenant=coral` → plum / coral "Coral Pay"
+>
+> Click the pills to re-theme the whole page live (colors, logo, copy) — all
+> injected at the edge, no client fetch, no flash.
+>
+> **How it turns off:** demo mode is active only while `TENANT_CONFIG_BASE` is
+> **unset**. The moment you set that env var (real S3 mode, see Mode A), the
+> sample tenants and switcher disappear automatically. For a clean production
+> build, delete the `SAMPLE_TENANTS` / `makeTenant` / `logoDataUri` /
+> `SwitcherInjector` blocks from `_middleware.js`.
+
 ## How it works
 
 Two things are data-driven:

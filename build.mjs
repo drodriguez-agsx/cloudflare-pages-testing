@@ -138,16 +138,22 @@ async function writeGallery() {
   }
   built.sort((a, b) => a.slug.localeCompare(b.slug));
 
-  const cards = built.map((t) => `
+  const cards = built.map((t) => {
+    // A data:/http logo is used as-is; a bare filename lives inside the bundle.
+    const logoSrc = t.logo
+      ? (/^(https?:|data:)/i.test(t.logo) ? t.logo : `./${encodeURIComponent(t.slug)}/${t.logo}`)
+      : null;
+    return `
       <a class="card" href="./${encodeURIComponent(t.slug)}/" style="--accent:${escAttr(t.accent)}">
         <span class="bar"></span>
-        ${t.logo
-          ? `<img class="logo" src="./${encodeURIComponent(t.slug)}/${escAttr(t.logo)}" alt="">`
+        ${logoSrc
+          ? `<img class="logo" src="${escAttr(logoSrc)}" alt="">`
           : `<span class="logo logo--none">${escHtml((t.name || t.slug).slice(0, 2).toUpperCase())}</span>`}
         <span class="name">${escHtml(t.name)}</span>
         <span class="slug">/${escHtml(t.slug)}/</span>
         <span class="open">Open preview →</span>
-      </a>`).join('');
+      </a>`;
+  }).join('');
 
   const html = `<!doctype html>
 <html lang="en">

@@ -357,8 +357,10 @@
       border-radius: 10px;
       display: flex; align-items: center; justify-content: center;
     }
+    .contact-card > div { min-width: 0; }   /* allow the text column to shrink so long values wrap */
     .contact-card h3 { font-size: .85rem; font-weight: 700; color: var(--color-muted); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 4px; }
-    .contact-card p { font-size: 1rem; font-weight: 600; color: var(--color-primary); margin-bottom: 2px; }
+    .contact-card p { font-size: 1rem; font-weight: 600; color: var(--color-primary); margin-bottom: 2px; overflow-wrap: anywhere; }
+    .contact-card p a { overflow-wrap: anywhere; }
     .contact-card small { font-size: .8rem; color: var(--color-muted); }
 
     /* ─── Privacy Policy ───────────────────────────────────────────── */

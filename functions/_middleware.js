@@ -46,7 +46,11 @@ export async function onRequest(context) {
 
   let rewriter = new HTMLRewriter();
   if (config) rewriter = rewriter.on('head', new ConfigInjector(config));
-  if (demo) rewriter = rewriter.on('body', new SwitcherInjector(slug));
+  // Demo tenant switcher — DISABLED. We've moved to the per-tenant factory /
+  // baked-bundle strategy (RFC-002), so the on-page switcher isn't needed.
+  // The SwitcherInjector class + SAMPLE_TENANTS below are kept intentionally in
+  // case we revisit an on-page demo. To re-enable, uncomment the next line:
+  // if (demo) rewriter = rewriter.on('body', new SwitcherInjector(slug));
   return rewriter.transform(response);
 }
 

@@ -55,11 +55,25 @@
          individually for fine-grained, per-component theming. */
       --header-bg:            var(--color-primary);
       --header-accent:        var(--color-accent);
+      --header-text:          var(--color-surface);
+      --header-subtitle:      var(--color-accent-lt);
+      --header-nav:           rgba(255,255,255,.80);
+      --header-nav-hover:     var(--color-accent-lt);
+      --logo-size:            52px;      /* header logo box size            */
+      --logo-text-display:    block;     /* set to "none" for lockup logos  */
 
       --hero-from:            var(--color-primary);
       --hero-via:             var(--color-primary-mid);
       --hero-to:              #1a4fc8;
       --hero-accent-text:     var(--color-accent-lt);
+      --hero-text:            var(--color-surface);
+      --hero-subtext:         rgba(255,255,255,.80);
+      --hero-badge-bg:        rgba(245,196,0,.20);
+      --hero-badge-border:    rgba(245,196,0,.50);
+      --hero-badge-text:      var(--color-accent-lt);
+      --pill-bg:              rgba(255,255,255,.10);
+      --pill-border:          rgba(255,255,255,.20);
+      --pill-text:            var(--color-surface);
 
       --btn-primary-bg:       var(--color-primary);
       --btn-primary-bg-hover: var(--color-primary-mid);
@@ -112,41 +126,41 @@
     }
     .logo-wrap { display: flex; align-items: center; gap: 14px; }
     .logo-icon {
-      width: 52px; height: 52px;
+      width: var(--logo-size); height: var(--logo-size);
       background: var(--color-surface);
       border-radius: 8px;
       display: flex; align-items: center; justify-content: center;
       flex-shrink: 0;
       overflow: hidden;
-      padding: 3px;
+      padding: 4px;
     }
     .logo-icon img {
       width: 100%; height: 100%;
       object-fit: contain;
     }
     .logo-fallback { display: none; }
-    .logo-text { line-height: 1.2; }
+    .logo-text { line-height: 1.2; display: var(--logo-text-display); }
     .logo-text strong {
       display: block;
       font-size: 14px;
       font-weight: 800;
-      color: var(--color-surface);
+      color: var(--header-text);
       letter-spacing: .01em;
     }
     .logo-text span {
       font-size: 11px;
-      color: var(--color-accent-lt);
+      color: var(--header-subtitle);
       letter-spacing: .04em;
     }
     nav { display: flex; gap: 24px; }
     nav a {
-      color: rgba(255,255,255,.80);
+      color: var(--header-nav);
       font-size: 13px;
       font-weight: 600;
       text-decoration: none;
       transition: color .2s;
     }
-    nav a:hover { color: var(--color-accent-lt); text-decoration: none; }
+    nav a:hover { color: var(--header-nav-hover); text-decoration: none; }
 
     /* ─── Hamburger (mobile) ───────────────────────────────────────── */
     .hamburger {
@@ -196,12 +210,38 @@
         radial-gradient(ellipse at 90% 20%, rgba(46,196,218,.14) 0%, transparent 50%);
       pointer-events: none;
     }
-    .hero-inner { max-width: 760px; margin: 0 auto; position: relative; }
+    .hero-inner {
+      max-width: 1080px;
+      margin: 0 auto;
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 48px;
+    }
+    .hero-copy { flex: 1 1 0; min-width: 0; }
+    .hero-visual {
+      flex: 0 0 auto;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    /* decorative brand circles behind the phone (mockup) */
+    .hero-visual::before,
+    .hero-visual::after {
+      content: '';
+      position: absolute;
+      border-radius: 50%;
+      background: var(--color-accent);
+      z-index: 0;
+    }
+    .hero-visual::before { width: 190px; height: 190px; top: -26px; right: -34px; opacity: .9; }
+    .hero-visual::after  { width: 120px; height: 120px; bottom: -14px; left: -30px; opacity: .7; }
     .hero-badge {
       display: inline-block;
-      background: rgba(245,196,0,.20);
-      border: 1px solid rgba(245,196,0,.50);
-      color: var(--color-accent-lt);
+      background: var(--hero-badge-bg);
+      border: 1px solid var(--hero-badge-border);
+      color: var(--hero-badge-text);
       font-size: 11px;
       font-weight: 700;
       letter-spacing: .1em;
@@ -213,14 +253,14 @@
     .hero h1 {
       font-size: clamp(1.8rem, 5vw, 2.8rem);
       font-weight: 800;
-      color: var(--color-surface);
+      color: var(--hero-text);
       line-height: 1.2;
       margin-bottom: 20px;
     }
     .hero h1 .hl { color: var(--hero-accent-text); }
     .hero p {
       font-size: 1.05rem;
-      color: rgba(255,255,255,.80);
+      color: var(--hero-subtext);
       max-width: 580px;
       margin: 0 auto 36px;
     }
@@ -232,9 +272,9 @@
       margin-bottom: 40px;
     }
     .feature-pill {
-      background: rgba(255,255,255,.10);
-      border: 1px solid rgba(255,255,255,.20);
-      color: var(--color-surface);
+      background: var(--pill-bg);
+      border: 1px solid var(--pill-border);
+      color: var(--pill-text);
       font-size: 13px;
       font-weight: 600;
       padding: 8px 18px;
@@ -416,7 +456,136 @@
       font-weight: 700;
     }
 
+    /* ─── Hero image (phone mockup) ────────────────────────────────── */
+    .hero-image {
+      display: block;
+      position: relative;
+      z-index: 1;
+      max-width: 300px;
+      width: 100%;
+      height: auto;
+      filter: drop-shadow(0 18px 40px rgba(0,0,0,.28));
+    }
+    .hero-image:not([src]), .hero-image[src=""] { display: none; }
+    /* No hero image → let the copy use the full width, centered. */
+    .hero-visual:not(:has(.hero-image[src])) { display: none; }
+
+    /* ─── Offerings icon (tokenized so it follows the tenant palette) ── */
+    .feature-card .feature-icon svg { stroke: var(--color-primary); }
+
+    /* ─── Data Deletion ────────────────────────────────────────────── */
+    .deletion-note {
+      background: var(--color-surface);
+      border-left: 4px solid var(--card-accent);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      box-shadow: var(--shadow);
+      margin-top: 28px;
+    }
+    .deletion-note strong { color: var(--color-primary); display: block; margin-bottom: 6px; }
+    .deletion-note p { margin: 0; font-size: .93rem; }
+    .deletion-steps {
+      margin: 28px 0 0;
+      padding: 0;
+      list-style: none;
+      counter-reset: step;
+      display: grid;
+      gap: 14px;
+    }
+    .deletion-steps li {
+      counter-increment: step;
+      background: var(--color-surface);
+      border-radius: var(--radius);
+      padding: 16px 20px 16px 58px;
+      position: relative;
+      box-shadow: var(--shadow);
+    }
+    .deletion-steps li::before {
+      content: counter(step);
+      position: absolute; left: 16px; top: 16px;
+      width: 28px; height: 28px;
+      background: var(--color-primary);
+      color: var(--color-surface);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .85rem; font-weight: 700;
+    }
+    .deletion-steps li strong { display: block; color: var(--color-primary); font-size: .95rem; margin-bottom: 2px; }
+    .deletion-steps li span { font-size: .9rem; color: var(--color-text-muted); }
+    .deletion-form {
+      margin-top: 32px;
+      background: var(--color-surface);
+      border-radius: var(--radius);
+      padding: 28px;
+      box-shadow: var(--shadow);
+      max-width: 520px;
+    }
+    .deletion-form .field { margin-bottom: 16px; }
+    .deletion-form label { display: block; font-size: .85rem; font-weight: 600; color: var(--color-primary); margin-bottom: 6px; }
+    .deletion-form input, .deletion-form select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--color-bg-alt);
+      border-radius: 8px;
+      font: inherit;
+      font-size: .95rem;
+      color: var(--color-text);
+      background: var(--color-bg);
+    }
+    .deletion-form input:focus, .deletion-form select:focus { outline: 2px solid var(--color-primary-mid); border-color: transparent; }
+    .deletion-disclaimer { font-size: .82rem; color: var(--color-muted); margin: 4px 0 18px; }
+    .deletion-success { display: none; color: var(--color-primary); font-weight: 600; margin: 0; }
+    .deletion-form.sent .field,
+    .deletion-form.sent .deletion-disclaimer,
+    .deletion-form.sent button { display: none; }
+    .deletion-form.sent .deletion-success { display: block; }
+
+    /* ─── Modal (privacy policy) ───────────────────────────────────── */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(10,15,30,.55);
+      display: flex; align-items: center; justify-content: center;
+      padding: 24px; z-index: 1000;
+    }
+    .modal-overlay[hidden] { display: none; }
+    .modal {
+      background: var(--color-surface);
+      border-radius: var(--radius);
+      max-width: 720px; width: 100%;
+      max-height: 85vh;
+      display: flex; flex-direction: column;
+      box-shadow: 0 20px 60px rgba(0,0,0,.35);
+      overflow: hidden;
+    }
+    .modal-head {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 28px;
+      border-bottom: 1px solid var(--color-bg-alt);
+    }
+    .modal-head h3 { margin: 0; color: var(--color-primary); font-size: 1.15rem; }
+    .modal-close {
+      background: none; border: none; cursor: pointer;
+      font-size: 1.7rem; line-height: 1; color: var(--color-muted); padding: 0 4px;
+    }
+    .modal-close:hover { color: var(--color-primary); }
+    .modal-body { padding: 22px 28px 28px; overflow-y: auto; }
+    .modal-eff { font-size: .82rem; color: var(--color-muted); margin-bottom: 18px; }
+    .modal-eff:empty { display: none; }
+    .policy-section { margin-bottom: 18px; }
+    .policy-section h4 { color: var(--color-primary); font-size: 1rem; margin-bottom: 6px; }
+    .policy-section p { font-size: .9rem; margin: 0; }
+    body.modal-open { overflow: hidden; }
+
     /* ─── Responsive ───────────────────────────────────────────────── */
+    /* Below 860px the hero stacks: copy on top, phone below (centered). */
+    @media (max-width: 860px) {
+      .hero-inner { flex-direction: column; gap: 36px; }
+      .hero-copy { order: 1; }
+      .hero-visual { order: 2; }
+      .hero-image { max-width: 240px; }
+      .hero-visual::before { width: 150px; height: 150px; top: -20px; right: -20px; }
+      .hero-visual::after  { width: 96px;  height: 96px;  bottom: -10px; left: -14px; }
+    }
     @media (max-width: 640px) {
       nav { display: none; }
       .hamburger { display: flex; }
@@ -426,6 +595,7 @@
       .policy-cta { flex-direction: column; align-items: flex-start; }
       .footer-inner { flex-direction: column; }
       .footer-bottom { flex-direction: column; align-items: flex-start; }
+      .modal-head, .modal-body { padding-left: 20px; padding-right: 20px; }
     }
   </style>
 
@@ -452,8 +622,10 @@
 
     <nav>
       <a href="#about">About</a>
+      <a href="#offerings">Offerings</a>
       <a href="#support">Support</a>
-      <a href="#privacy">Privacy Policy</a>
+      <a href="#privacy">Privacy</a>
+      <a href="#deletion">Data Deletion</a>
     </nav>
 
     <button class="hamburger" onclick="toggleMenu()" aria-label="Menu">
@@ -462,9 +634,11 @@
   </div>
 
   <div class="mobile-nav" id="mobileNav">
-    <a href="#about"   onclick="toggleMenu()">About the App</a>
-    <a href="#support" onclick="toggleMenu()">Support &amp; Contact</a>
-    <a href="#privacy" onclick="toggleMenu()">Privacy Policy</a>
+    <a href="#about"     onclick="toggleMenu()">About the Bank</a>
+    <a href="#offerings" onclick="toggleMenu()">Bank Offerings</a>
+    <a href="#support"   onclick="toggleMenu()">Support &amp; Contact</a>
+    <a href="#privacy"   onclick="toggleMenu()">Privacy Policy</a>
+    <a href="#deletion"  onclick="toggleMenu()">Data Deletion</a>
   </div>
 </header>
 
@@ -474,6 +648,7 @@
 ══════════════════════════════════════════════════════════════════════ -->
 <section class="hero" id="about">
   <div class="hero-inner">
+   <div class="hero-copy">
     <div class="hero-badge" data-text="hero.badge">Tagline Placeholder</div>
 
     <h1><span data-text="hero.headlineLead">Lorem Ipsum with</span> <span class="hl" data-text="hero.headlineAccent">Dolor Sit</span></h1>
@@ -518,62 +693,35 @@
         </div>
       </a>
     </div>
+   </div><!-- /.hero-copy -->
+
+   <div class="hero-visual">
+     <img class="hero-image" data-attr-src="hero.image" alt="">
+   </div>
   </div>
 </section>
 
 
 <!-- ══════════════════════════════════════════════════════════════════
-     APP FEATURES
+     BANK OFFERINGS  ("What You Can Do")
+     Cards are rendered from offerings.items[] via the data-list loader.
 ══════════════════════════════════════════════════════════════════════ -->
-<section class="section" id="features">
+<section class="section" id="offerings">
   <div class="container">
-    <span class="section-label" data-text="features.label">Section Label</span>
-    <h2 data-text="features.heading">Lorem Ipsum Dolor Sit Amet</h2>
-    <p data-text="features.intro">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+    <span class="section-label" data-text="offerings.label">Section Label</span>
+    <h2 data-text="offerings.heading">Bank Offerings</h2>
+    <p data-text="offerings.intro">Explore the products and services we offer.</p>
 
-    <div class="features-grid">
-      <div class="feature-card">
-        <div class="feature-icon">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0d2b5e" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+    <div class="features-grid" data-list="offerings.items">
+      <template>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.5 2.5 4.5-5"/></svg>
+          </div>
+          <h3 data-text="title">Offering</h3>
+          <p data-text="body">Description</p>
         </div>
-        <h3 data-text="features.items.0.title">Lorem Ipsum One</h3>
-        <p data-text="features.items.0.body">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0d2b5e" stroke-width="2"><path d="M18 8l4 4-4 4"/><path d="M6 16l-4-4 4-4"/><line x1="14" y1="4" x2="10" y2="20"/></svg>
-        </div>
-        <h3 data-text="features.items.1.title">Lorem Ipsum Two</h3>
-        <p data-text="features.items.1.body">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0d2b5e" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-        </div>
-        <h3 data-text="features.items.2.title">Lorem Ipsum Three</h3>
-        <p data-text="features.items.2.body">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0d2b5e" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-        </div>
-        <h3 data-text="features.items.3.title">Lorem Ipsum Four</h3>
-        <p data-text="features.items.3.body">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0d2b5e" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.79 19.79 0 0 1 11.6 19a19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 3.1 4.18 2 2 0 0 1 5.08 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.68 2.81a2 2 0 0 1-.45 2.11L9.09 9.91A16 16 0 0 0 15 15.91l1.27-1.27a2 2 0 0 1 2.11-.45c.9.32 1.85.55 2.81.68A2 2 0 0 1 22 16.92z"/></svg>
-        </div>
-        <h3 data-text="features.items.4.title">Lorem Ipsum Five</h3>
-        <p data-text="features.items.4.body">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0d2b5e" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        </div>
-        <h3 data-text="features.items.5.title">Lorem Ipsum Six</h3>
-        <p data-text="features.items.5.body">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-      </div>
+      </template>
     </div>
   </div>
 </section>
@@ -655,16 +803,46 @@
     </p>
 
     <div class="policy-box">
-
       <div class="policy-cta">
         <p>
-          <strong>Full Privacy Policy Document:</strong> Lorem ipsum dolor sit amet,
-          consectetur adipiscing elit. Link the published policy below.
+          Read how we collect, use, share, retain, and protect your personal
+          data — and your rights under the Data Privacy Act of 2012 (RA 10173).
         </p>
-        <a href="#" class="btn-primary" data-attr-href="privacy.fullPolicyUrl">View Full Privacy Policy ↗</a>
+        <button type="button" class="btn-primary" onclick="openPrivacy()">View Privacy Policy</button>
       </div>
-
     </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════════════
+     DATA DELETION
+     Steps rendered from deletion.steps[]; the request form is built from
+     deletion.form.fields[] by the loader (rudimentary — no backend).
+══════════════════════════════════════════════════════════════════════ -->
+<section class="section section--alt" id="deletion">
+  <div class="container">
+    <span class="section-label" data-text="deletion.label">Account &amp; Data</span>
+    <h2 data-text="deletion.heading">Request Account or Data Deletion</h2>
+    <p data-text="deletion.intro">You may request the deletion of your account and associated data.</p>
+
+    <div class="deletion-note">
+      <strong>What deletion means</strong>
+      <p data-text="deletion.whatItMeans">Deleting your account permanently removes app access.</p>
+    </div>
+
+    <ol class="deletion-steps" data-list="deletion.steps">
+      <template>
+        <li><strong data-text="title">Step</strong><span data-text="body">Detail</span></li>
+      </template>
+    </ol>
+
+    <form class="deletion-form" id="deletionForm" onsubmit="return submitDeletion(event)">
+      <div id="deletionFields"></div>
+      <p class="deletion-disclaimer" data-text="deletion.form.disclaimer">Disclaimer.</p>
+      <button type="submit" class="btn-primary">Submit Request</button>
+      <p class="deletion-success">✓ Your request has been recorded. We'll contact you to verify your identity before processing.</p>
+    </form>
   </div>
 </section>
 
@@ -679,9 +857,11 @@
       <span data-text="brand.location">City, Country</span>
     </div>
     <div class="footer-links">
-      <a href="#about">About the App</a>
+      <a href="#about">About the Bank</a>
+      <a href="#offerings">Offerings</a>
       <a href="#support">Support &amp; Contact</a>
       <a href="#privacy">Privacy Policy</a>
+      <a href="#deletion">Data Deletion</a>
       <a href="mailto:support@example.com" data-attr-href="support.emailHref" data-text="support.email">support@example.com</a>
     </div>
   </div>
@@ -696,6 +876,31 @@
     </div>
   </div>
 </footer>
+
+
+<!-- ══════════════════════════════════════════════════════════════════
+     PRIVACY POLICY MODAL
+     Sections rendered from privacy.sections[] via the data-list loader.
+══════════════════════════════════════════════════════════════════════ -->
+<div class="modal-overlay" id="privacyModal" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="pmTitle">
+    <div class="modal-head">
+      <h3 id="pmTitle" data-text="privacy.heading">Privacy Policy</h3>
+      <button class="modal-close" onclick="closePrivacy()" aria-label="Close">&times;</button>
+    </div>
+    <div class="modal-body">
+      <p class="modal-eff" data-text="privacy.effectiveDate"></p>
+      <div data-list="privacy.sections">
+        <template>
+          <section class="policy-section">
+            <h4 data-text="heading">Section</h4>
+            <p data-text="body">Body</p>
+          </section>
+        </template>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 <script>
@@ -716,6 +921,30 @@
       nav.classList.remove('open');
     }
   });
+
+  // ─── Privacy policy modal ────────────────────────────────────────
+  function openPrivacy() {
+    const m = document.getElementById('privacyModal');
+    if (m) { m.hidden = false; document.body.classList.add('modal-open'); }
+  }
+  function closePrivacy() {
+    const m = document.getElementById('privacyModal');
+    if (m) { m.hidden = true; document.body.classList.remove('modal-open'); }
+  }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closePrivacy(); });
+  document.addEventListener('click', e => {
+    const m = document.getElementById('privacyModal');
+    if (m && !m.hidden && e.target === m) closePrivacy();  // click on backdrop
+  });
+
+  // ─── Data-deletion form (rudimentary — no backend) ───────────────
+  // Records the request client-side and shows a confirmation. Wire to a
+  // real endpoint / mailto when a backend is available.
+  function submitDeletion(e) {
+    e.preventDefault();
+    e.currentTarget.classList.add('sent');
+    return false;
+  }
 </script>
 
 <script>
@@ -766,6 +995,70 @@
       });
     }
 
+    // Repeating lists: <el data-list="path.to.array"><template>…</template></el>
+    // For each array item the <template> is cloned; bindings inside resolve
+    // relative to the item (data-text="title" → item.title).
+    function applyLists(data) {
+      document.querySelectorAll('[data-list]').forEach(host => {
+        const arr = getPath(data, host.dataset.list);
+        const tpl = host.querySelector(':scope > template');
+        if (!Array.isArray(arr) || !tpl) return;
+        const frag = document.createDocumentFragment();
+        arr.forEach(item => {
+          const node = tpl.content.cloneNode(true);
+          node.querySelectorAll('[data-text]').forEach(el => {
+            const v = getPath(item, el.dataset.text);
+            if (v != null) el.textContent = v;
+            el.removeAttribute('data-text');
+          });
+          ['href', 'src', 'alt'].forEach(attr => {
+            node.querySelectorAll('[data-attr-' + attr + ']').forEach(el => {
+              const v = getPath(item, el.getAttribute('data-attr-' + attr));
+              if (v != null) el.setAttribute(attr, v);
+              el.removeAttribute('data-attr-' + attr);
+            });
+          });
+          frag.appendChild(node);
+        });
+        host.appendChild(frag);
+      });
+    }
+
+    // Build the account/data-deletion request form from deletion.form.fields[].
+    function renderDeletionForm(data) {
+      const fields = data && data.deletion && data.deletion.form && data.deletion.form.fields;
+      const mount = document.getElementById('deletionFields');
+      if (!mount || !Array.isArray(fields)) return;
+      fields.forEach(f => {
+        const wrap = document.createElement('div');
+        wrap.className = 'field';
+        const id = 'del-' + f.name;
+
+        const label = document.createElement('label');
+        label.setAttribute('for', id);
+        label.textContent = f.label || f.name;
+
+        let input;
+        if (f.type === 'select') {
+          input = document.createElement('select');
+          (f.options || []).forEach(opt => {
+            const o = document.createElement('option');
+            o.value = opt; o.textContent = opt;
+            input.appendChild(o);
+          });
+        } else {
+          input = document.createElement('input');
+          input.type = f.type || 'text';
+        }
+        input.id = id;
+        input.name = f.name;
+
+        wrap.appendChild(label);
+        wrap.appendChild(input);
+        mount.appendChild(wrap);
+      });
+    }
+
     async function resolveConfig() {
       // Mode A — config already present (injected at the edge).
       if (window.__TENANT__) return window.__TENANT__;
@@ -785,6 +1078,8 @@
         if (data) {
           applyTokens(data.tokens);
           applyContent(data);
+          applyLists(data);
+          renderDeletionForm(data);
         }
       })
       .catch(err => console.error('[tenant] config load failed, using defaults:', err))

@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rural Bank of Hermosa (Bataan), Inc. | Mobile Banking App</title>
+  <meta name="description" content="Official mobile banking app of Rural Bank of Hermosa (Bataan), Inc. — secure, convenient digital banking." />
+
+
+  <style>
+    /* ─── Reset & Base ─────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      color: var(--color-text);
+      background: var(--color-bg);
+    }
+    /* Hide until the tenant theme is applied to avoid a flash of default colors.
+       Revealed by the loader (or by the fallback timeout / <noscript> below). */
+    body.preload { visibility: hidden; }
+
+    /* ─── Design Tokens ────────────────────────────────────────────── */
+    :root {
+      /* ── Brand palette — override these per tenant ───────────────── */
+      --color-primary:        #0b1f5c;   /* primary dark navy            */
+      --color-primary-mid:    #1535a0;   /* mid-tone primary             */
+      --color-accent:         #f5c400;   /* accent / highlight (gold)    */
+      --color-accent-lt:      #ffe066;   /* lighter accent               */
+      --color-highlight:      #2ec4da;   /* tertiary highlight (teal)    */
+
+      /* ── Neutrals ────────────────────────────────────────────────── */
+      --color-surface:        #ffffff;
+      --color-bg:             #f5f7fa;
+      --color-bg-alt:         #edf0f5;
+      --color-muted:          #8590a2;
+      --color-text:           #1a1a2e;
+      --color-text-muted:     #4a5568;
+
+      /* ── Shape ───────────────────────────────────────────────────── */
+      --radius:               10px;
+      --shadow:               0 4px 20px rgba(13,43,94,.10);
+
+      /* ── Component tokens ────────────────────────────────────────────
+         These default to the brand palette but can be overridden
+         individually for fine-grained, per-component theming. */
+      --header-bg:            var(--color-primary);
+      --header-accent:        var(--color-accent);
+      --header-text:          var(--color-surface);
+      --header-subtitle:      var(--color-accent-lt);
+      --header-nav:           rgba(255,255,255,.80);
+      --header-nav-hover:     var(--color-accent-lt);
+      --logo-size:            52px;      /* header logo box size            */
+      --logo-text-display:    block;     /* set to "none" for lockup logos  */
+
+      --hero-from:            var(--color-primary);
+      --hero-via:             var(--color-primary-mid);
+      --hero-to:              #1a4fc8;
+      --hero-accent-text:     var(--color-accent-lt);
+      --hero-text:            var(--color-surface);
+      --hero-subtext:         rgba(255,255,255,.80);
+      --hero-badge-bg:        rgba(245,196,0,.20);
+      --hero-badge-border:    rgba(245,196,0,.50);
+      --hero-badge-text:      var(--color-accent-lt);
+      --pill-bg:              rgba(255,255,255,.10);
+      --pill-border:          rgba(255,255,255,.20);
+      --pill-text:            var(--color-surface);
+
+      --btn-primary-bg:       var(--color-primary);
+      --btn-primary-bg-hover: var(--color-primary-mid);
+
+      --card-accent:          var(--color-accent);
+      --section-label:        var(--color-accent);
+
+      --footer-bg:            var(--color-primary);
+      --footer-accent:        var(--color-accent);
+    }
+
+    /* ─── Utility ──────────────────────────────────────────────────── */
+    .container { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+    .section { padding: 72px 0; }
+    .section--alt { background: var(--color-bg-alt); }
+    .section-label {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--section-label);
+      margin-bottom: 10px;
+    }
+    h2 {
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      font-weight: 700;
+      color: var(--color-primary);
+      margin-bottom: 16px;
+    }
+    p { color: var(--color-text-muted); margin-bottom: 16px; }
+    a { color: var(--color-primary-mid); text-decoration: none; }
+    a:hover { text-decoration: underline; color: var(--color-accent); }
+
+    /* ─── Header ───────────────────────────────────────────────────── */
+    header {
+      background: var(--header-bg);
+      border-bottom: 4px solid var(--header-accent);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 24px;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+    .logo-wrap { display: flex; align-items: center; gap: 14px; }
+    .logo-icon {
+      width: var(--logo-size); height: var(--logo-size);
+      background: var(--color-surface);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      overflow: hidden;
+      padding: 4px;
+    }
+    .logo-icon img {
+      width: 100%; height: 100%;
+      object-fit: contain;
+    }
+    .logo-fallback { display: none; }
+    .logo-text { line-height: 1.2; display: var(--logo-text-display); }
+    .logo-text strong {
+      display: block;
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--header-text);
+      letter-spacing: .01em;
+    }
+    .logo-text span {
+      font-size: 11px;
+      color: var(--header-subtitle);
+      letter-spacing: .04em;
+    }
+    nav { display: flex; gap: 24px; }
+    nav a {
+      color: var(--header-nav);
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: color .2s;
+    }
+    nav a:hover { color: var(--header-nav-hover); text-decoration: none; }
+
+    /* ─── Hamburger (mobile) ───────────────────────────────────────── */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+      background: none;
+      border: none;
+    }
+    .hamburger span {
+      display: block; width: 24px; height: 2px;
+      background: var(--color-surface); border-radius: 2px;
+      transition: .3s;
+    }
+    .mobile-nav {
+      display: none;
+      flex-direction: column;
+      background: var(--color-primary-mid);
+      padding: 12px 24px 16px;
+    }
+    .mobile-nav a {
+      color: var(--color-surface);
+      font-size: 14px;
+      font-weight: 600;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255,255,255,.1);
+      text-decoration: none;
+    }
+    .mobile-nav a:last-child { border-bottom: none; }
+    .mobile-nav.open { display: flex; }
+
+    /* ─── Hero ─────────────────────────────────────────────────────── */
+    .hero {
+      background: linear-gradient(135deg, var(--hero-from) 0%, var(--hero-via) 60%, var(--hero-to) 100%);
+      padding: 80px 24px 72px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse at 10% 80%, rgba(245,196,0,.18) 0%, transparent 50%),
+        radial-gradient(ellipse at 90% 20%, rgba(46,196,218,.14) 0%, transparent 50%);
+      pointer-events: none;
+    }
+    .hero-inner {
+      max-width: 1080px;
+      margin: 0 auto;
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 48px;
+    }
+    .hero-copy { flex: 1 1 0; min-width: 0; }
+    .hero-visual {
+      flex: 0 0 auto;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    /* decorative brand circles behind the phone (mockup) */
+    .hero-visual::before,
+    .hero-visual::after {
+      content: '';
+      position: absolute;
+      border-radius: 50%;
+      background: var(--color-accent);
+      z-index: 0;
+    }
+    .hero-visual::before { width: 190px; height: 190px; top: -26px; right: -34px; opacity: .9; }
+    .hero-visual::after  { width: 120px; height: 120px; bottom: -14px; left: -30px; opacity: .7; }
+    .hero-badge {
+      display: inline-block;
+      background: var(--hero-badge-bg);
+      border: 1px solid var(--hero-badge-border);
+      color: var(--hero-badge-text);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: 5px 14px;
+      border-radius: 20px;
+      margin-bottom: 22px;
+    }
+    .hero h1 {
+      font-size: clamp(1.8rem, 5vw, 2.8rem);
+      font-weight: 800;
+      color: var(--hero-text);
+      line-height: 1.2;
+      margin-bottom: 20px;
+    }
+    .hero h1 .hl { color: var(--hero-accent-text); }
+    .hero p {
+      font-size: 1.05rem;
+      color: var(--hero-subtext);
+      max-width: 580px;
+      margin: 0 auto 36px;
+    }
+    .hero-features {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 40px;
+    }
+    .feature-pill {
+      background: var(--pill-bg);
+      border: 1px solid var(--pill-border);
+      color: var(--pill-text);
+      font-size: 13px;
+      font-weight: 600;
+      padding: 8px 18px;
+      border-radius: 20px;
+      display: flex; align-items: center; gap: 7px;
+    }
+    .feature-pill svg { flex-shrink: 0; }
+    .store-buttons { display: flex; justify-content: center; flex-wrap: wrap; gap: 14px; }
+    .btn-store {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--color-surface);
+      color: var(--color-primary);
+      border-radius: 10px;
+      padding: 12px 22px;
+      font-weight: 700;
+      font-size: 14px;
+      text-decoration: none;
+      transition: transform .2s, box-shadow .2s;
+      box-shadow: 0 4px 14px rgba(0,0,0,.20);
+    }
+    .btn-store:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,.25); text-decoration: none; color: var(--color-primary); }
+    .btn-store svg { flex-shrink: 0; }
+    .btn-store-text { text-align: left; line-height: 1.2; }
+    .btn-store-text small { display: block; font-size: 10px; font-weight: 500; color: var(--color-muted); }
+    .btn-store-text span { font-size: 15px; font-weight: 800; }
+    .btn-store.soon {
+      background: rgba(255,255,255,.15);
+      border: 1px solid rgba(255,255,255,.30);
+      color: rgba(255,255,255,.70);
+      cursor: default;
+    }
+    .btn-store.soon:hover { transform: none; box-shadow: 0 4px 14px rgba(0,0,0,.20); }
+    .btn-store.soon small, .btn-store.soon span { color: rgba(255,255,255,.70); }
+
+    /* ─── Features ─────────────────────────────────────────────────── */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 24px;
+      margin-top: 36px;
+    }
+    .feature-card {
+      background: var(--color-surface);
+      border-radius: var(--radius);
+      padding: 28px;
+      box-shadow: var(--shadow);
+      border-top: 3px solid var(--card-accent);
+    }
+    .feature-icon {
+      width: 48px; height: 48px;
+      background: var(--color-bg-alt);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 16px;
+    }
+    .feature-card h3 { font-size: 1rem; font-weight: 700; color: var(--color-primary); margin-bottom: 8px; }
+    .feature-card p { font-size: .9rem; margin-bottom: 0; }
+
+    /* ─── Support / Contact ────────────────────────────────────────── */
+    #support .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+      margin-top: 36px;
+    }
+    .contact-card {
+      background: var(--color-surface);
+      border-radius: var(--radius);
+      padding: 24px 28px;
+      box-shadow: var(--shadow);
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+    }
+    .contact-icon {
+      width: 44px; height: 44px; flex-shrink: 0;
+      background: var(--color-primary);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .contact-card h3 { font-size: .85rem; font-weight: 700; color: var(--color-muted); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 4px; }
+    .contact-card p { font-size: 1rem; font-weight: 600; color: var(--color-primary); margin-bottom: 2px; }
+    .contact-card small { font-size: .8rem; color: var(--color-muted); }
+
+    /* ─── Privacy Policy ───────────────────────────────────────────── */
+    #privacy .policy-box {
+      background: var(--color-surface);
+      border-radius: var(--radius);
+      padding: 40px;
+      box-shadow: var(--shadow);
+      margin-top: 32px;
+      border-left: 4px solid var(--card-accent);
+    }
+    .policy-box h3 { font-size: 1.1rem; font-weight: 700; color: var(--color-primary); margin: 24px 0 8px; }
+    .policy-box h3:first-child { margin-top: 0; }
+    .policy-box p { font-size: .93rem; }
+    .policy-box ul {
+      margin: 0 0 16px 20px;
+      color: var(--color-text-muted);
+      font-size: .93rem;
+    }
+    .policy-box ul li { margin-bottom: 6px; }
+    .policy-cta {
+      margin-top: 32px;
+      padding: 20px 24px;
+      background: var(--color-bg-alt);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .policy-cta p { margin: 0; font-size: .92rem; color: var(--color-text-muted); }
+    .btn-primary {
+      display: inline-block;
+      background: var(--btn-primary-bg);
+      color: var(--color-surface);
+      padding: 10px 22px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: .9rem;
+      text-decoration: none;
+      transition: background .2s;
+      white-space: nowrap;
+    }
+    .btn-primary:hover { background: var(--btn-primary-bg-hover); color: var(--color-surface); text-decoration: none; }
+
+    /* ─── Footer ───────────────────────────────────────────────────── */
+    footer {
+      background: var(--footer-bg);
+      border-top: 4px solid var(--footer-accent);
+      color: rgba(255,255,255,.65);
+      padding: 40px 24px 28px;
+      font-size: .88rem;
+    }
+    .footer-inner {
+      max-width: 960px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 24px;
+    }
+    .footer-brand strong { display: block; color: var(--color-surface); font-size: 1rem; margin-bottom: 4px; }
+    .footer-brand span { font-size: .8rem; color: var(--color-accent-lt); }
+    .footer-links { display: flex; flex-wrap: wrap; gap: 8px 20px; }
+    .footer-links a { color: rgba(255,255,255,.65); font-size: .86rem; }
+    .footer-links a:hover { color: var(--color-accent-lt); }
+    .footer-divider {
+      width: 100%;
+      height: 1px;
+      background: rgba(255,255,255,.10);
+      margin: 24px 0 20px;
+    }
+    .footer-bottom {
+      max-width: 960px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      font-size: .82rem;
+    }
+    .trust-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(245,196,0,.15);
+      border: 1px solid rgba(245,196,0,.45);
+      color: var(--color-accent-lt);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: .8rem;
+      font-weight: 700;
+    }
+
+    /* ─── Hero image (phone mockup) ────────────────────────────────── */
+    .hero-image {
+      display: block;
+      position: relative;
+      z-index: 1;
+      max-width: 300px;
+      width: 100%;
+      height: auto;
+      filter: drop-shadow(0 18px 40px rgba(0,0,0,.28));
+    }
+    .hero-image:not([src]), .hero-image[src=""] { display: none; }
+    /* No hero image → let the copy use the full width, centered. */
+    .hero-visual:not(:has(.hero-image[src])) { display: none; }
+
+    /* ─── Offerings icon (tokenized so it follows the tenant palette) ── */
+    .feature-card .feature-icon svg { stroke: var(--color-primary); }
+
+    /* ─── Data Deletion ────────────────────────────────────────────── */
+    .deletion-note {
+      background: var(--color-surface);
+      border-left: 4px solid var(--card-accent);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      box-shadow: var(--shadow);
+      margin-top: 28px;
+    }
+    .deletion-note strong { color: var(--color-primary); display: block; margin-bottom: 6px; }
+    .deletion-note p { margin: 0; font-size: .93rem; }
+    .deletion-steps {
+      margin: 28px 0 0;
+      padding: 0;
+      list-style: none;
+      counter-reset: step;
+      display: grid;
+      gap: 14px;
+    }
+    .deletion-steps li {
+      counter-increment: step;
+      background: var(--color-surface);
+      border-radius: var(--radius);
+      padding: 16px 20px 16px 58px;
+      position: relative;
+      box-shadow: var(--shadow);
+    }
+    .deletion-steps li::before {
+      content: counter(step);
+      position: absolute; left: 16px; top: 16px;
+      width: 28px; height: 28px;
+      background: var(--color-primary);
+      color: var(--color-surface);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .85rem; font-weight: 700;
+    }
+    .deletion-steps li strong { display: block; color: var(--color-primary); font-size: .95rem; margin-bottom: 2px; }
+    .deletion-steps li span { font-size: .9rem; color: var(--color-text-muted); }
+    .deletion-form {
+      margin-top: 32px;
+      background: var(--color-surface);
+      border-radius: var(--radius);
+      padding: 28px;
+      box-shadow: var(--shadow);
+      max-width: 520px;
+    }
+    .deletion-form .field { margin-bottom: 16px; }
+    .deletion-form label { display: block; font-size: .85rem; font-weight: 600; color: var(--color-primary); margin-bottom: 6px; }
+    .deletion-form input, .deletion-form select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--color-bg-alt);
+      border-radius: 8px;
+      font: inherit;
+      font-size: .95rem;
+      color: var(--color-text);
+      background: var(--color-bg);
+    }
+    .deletion-form input:focus, .deletion-form select:focus { outline: 2px solid var(--color-primary-mid); border-color: transparent; }
+    .deletion-disclaimer { font-size: .82rem; color: var(--color-muted); margin: 4px 0 18px; }
+    .deletion-success { display: none; color: var(--color-primary); font-weight: 600; margin: 0; }
+    .deletion-form.sent .field,
+    .deletion-form.sent .deletion-disclaimer,
+    .deletion-form.sent button { display: none; }
+    .deletion-form.sent .deletion-success { display: block; }
+
+    /* ─── Modal (privacy policy) ───────────────────────────────────── */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(10,15,30,.55);
+      display: flex; align-items: center; justify-content: center;
+      padding: 24px; z-index: 1000;
+    }
+    .modal-overlay[hidden] { display: none; }
+    .modal {
+      background: var(--color-surface);
+      border-radius: var(--radius);
+      max-width: 720px; width: 100%;
+      max-height: 85vh;
+      display: flex; flex-direction: column;
+      box-shadow: 0 20px 60px rgba(0,0,0,.35);
+      overflow: hidden;
+    }
+    .modal-head {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 28px;
+      border-bottom: 1px solid var(--color-bg-alt);
+    }
+    .modal-head h3 { margin: 0; color: var(--color-primary); font-size: 1.15rem; }
+    .modal-close {
+      background: none; border: none; cursor: pointer;
+      font-size: 1.7rem; line-height: 1; color: var(--color-muted); padding: 0 4px;
+    }
+    .modal-close:hover { color: var(--color-primary); }
+    .modal-body { padding: 22px 28px 28px; overflow-y: auto; }
+    .modal-eff { font-size: .82rem; color: var(--color-muted); margin-bottom: 18px; }
+    .modal-eff:empty { display: none; }
+    .policy-section { margin-bottom: 18px; }
+    .policy-section h4 { color: var(--color-primary); font-size: 1rem; margin-bottom: 6px; }
+    .policy-section p { font-size: .9rem; margin: 0; }
+    body.modal-open { overflow: hidden; }
+
+    /* ─── Responsive ───────────────────────────────────────────────── */
+    /* Below 860px the hero stacks: copy on top, phone below (centered). */
+    @media (max-width: 860px) {
+      .hero-inner { flex-direction: column; gap: 36px; }
+      .hero-copy { order: 1; }
+      .hero-visual { order: 2; }
+      .hero-image { max-width: 240px; }
+      .hero-visual::before { width: 150px; height: 150px; top: -20px; right: -20px; }
+      .hero-visual::after  { width: 96px;  height: 96px;  bottom: -10px; left: -14px; }
+    }
+    @media (max-width: 640px) {
+      nav { display: none; }
+      .hamburger { display: flex; }
+      .section { padding: 52px 0; }
+      .hero { padding: 56px 20px 52px; }
+      .policy-box { padding: 24px 20px; }
+      .policy-cta { flex-direction: column; align-items: flex-start; }
+      .footer-inner { flex-direction: column; }
+      .footer-bottom { flex-direction: column; align-items: flex-start; }
+      .modal-head, .modal-body { padding-left: 20px; padding-right: 20px; }
+    }
+  </style>
+
+  <!-- If JS is disabled, never leave the page hidden. -->
+  <noscript><style>body.preload { visibility: visible; }</style></noscript>
+  <!--
+  GENERATED by build.mjs — DO NOT EDIT THIS FILE.
+  Source of truth: tenants/hermosa/tenant.json (+ assets in that folder)
+  Rebuild:         node build.mjs hermosa
+-->
+  <script>window.__TENANT__={"meta":{"title":"Rural Bank of Hermosa (Bataan), Inc. | Mobile Banking App","description":"Official mobile banking app of Rural Bank of Hermosa (Bataan), Inc. — secure, convenient digital banking."},"brand":{"name":"Rural Bank of Hermosa (Bataan), Incorporated","shortName":"RBH","tagline":"Bataan, Philippines","location":"Hermosa, Bataan","logoUrl":"logo.png"},"hero":{"badge":"Official Mobile Banking App","headlineLead":"Stay and Grow","headlineAccent":"with Us","subhead":"Secure, convenient, and fully digital banking for the communities we serve — anytime, anywhere.","image":"hero.png","pills":[{"label":"Secure Log-in"},{"label":"Instant Transfers"},{"label":"24/7 Access"},{"label":"Account Management"}]},"about":{"paragraphs":["At Rural Bank of Hermosa (Bataan), Inc., we are committed to being one of the leading rural banks in Bataan by upholding the values of trust, responsibility, and integrity while delivering accessible financial solutions and exceptional customer service.","We strive to foster lasting relationships with our clients, support community development, promote sustainable growth, and maintain full compliance with regulatory standards and good governance.","Through professional excellence, continuous learning, and a dedicated workforce, we aim to provide reliable banking services that contribute to the success of our customers and the communities we serve."],"yearEstablished":"1969","areasServed":"Hermosa, Bataan"},"offerings":{"label":"What You Can Do","heading":"Bank Offerings","intro":"Explore the products and services we offer to help you grow, manage, and protect your finances.","items":[{"title":"Deposit Accounts","body":"Grow your money with our PDIC-insured Savings Account (Regular and Premium) and manage day-to-day transactions with our Checking Account."},{"title":"Agricultural Loans","body":"Financing for farmers and agri-businesses in the community."},{"title":"Housing Loans","body":"Turn your dream home into reality with flexible financing solutions for purchasing, building, or improving your home."},{"title":"Business Loans","body":"Capital financing for small and medium enterprises."},{"title":"Motor Vehicle Loans","body":"Drive home your ideal vehicle with affordable financing and flexible repayment terms."},{"title":"Salary / Personal Loans","body":"Fast and flexible loans for personal and emergency needs."}]},"support":{"label":"App Support & Contact","heading":"We're Here to Help","intro":"For any questions, concerns, or technical issues with the app, reach out through any channel below.","email":"support@rbhermosa.com.ph","emailHref":"mailto:support@rbhermosa.com.ph","phone":"09859700110","phoneHref":"tel:09859700110","address":"Burgos St. (Poblacion), Hermosa, Bataan","hours":"Mon – Fri, 8:30 AM – 3:30 PM","hoursNote":"Saturdays and holidays may vary"},"privacy":{"label":"Legal & Data Privacy","heading":"Privacy Policy","intro":"Rural Bank of Hermosa (Bataan), Inc. is committed to protecting the privacy and security of the information you share with us.","effectiveDate":"","sections":[{"heading":"1. Who we are","body":"Rural Bank of Hermosa (Bataan), Incorporated is a rural bank licensed by the Bangko Sentral ng Pilipinas (BSP) with principal office at Burgos St., Poblacion, Hermosa, Bataan. We operate the Rural Bank of Hermosa (Bataan), Inc. mobile banking app available on the Apple App Store and Google Play Store. For questions about this policy, contact us at compliance@rbhermosa.com.ph."},{"heading":"2. What data we collect","body":"Account data (name, date of birth, government ID, address, contact details); Transaction data (transfer records, payment history, balance inquiries); Biometric data (facial image and liveness check, collected during eKYC enrollment for identity verification only — not retained after the verification session); Device data (device model, OS version, unique device ID — for fraud prevention only); Usage data (session logs, feature interactions, error reports); Location data (approximate, only if permission is granted — used to verify transactions). We do not collect data from your contacts, camera, or microphone unless you separately grant permission for a specific feature."},{"heading":"3. How we use your data","body":"To open and maintain your account and EPFS enrollment; to verify your identity via eKYC (biometric facial matching and liveness detection); to process and record transactions; to conduct AML/KYC compliance checks, including PEP screening and sanctions screening, as required by the Anti-Money Laundering Act; to prevent fraud and unauthorized access; to comply with BSP regulations and other applicable Philippine laws; to send transaction notifications and security alerts; to improve the app based on anonymized usage patterns."},{"heading":"4. Data sharing","body":"We do not sell your personal data. We share it only on a strict need-to-know basis with: Higala Technology Philippines, Inc. (technology provider — processes customer account records and transaction data in encrypted cloud storage); RCBC (clearing and settlement bank — receives settlement-level transaction data only, not account balances or personal details); Veriff (eKYC provider — processes biometric data for identity verification during enrollment only; data not retained after the session); Amazon Web Services, Inc. (cloud infrastructure — hosts encrypted data on behalf of Higala; does not access customer data for its own purposes); BancNet, Inc. (ACH operator — receives transaction routing data for InstaPay clearing only); regulatory authorities (BSP, AMLC, NPC) as required by law; courts and law enforcement on valid legal process."},{"heading":"5. Data retention","body":"We retain personal and transaction data for a minimum of 10 years as required by BSP regulations and the AMLA. Biometric data collected during eKYC is not retained beyond the identity verification session unless required by law. After the applicable retention period, data is securely deleted or anonymized."},{"heading":"6. Your rights (RA 10173)","body":"Under the Data Privacy Act of 2012 (RA 10173), you have the following rights with respect to your personal data: Right to be Informed — be told what data is collected, why it is processed, and with whom it is shared; Right to Access — request a copy of your personal data and information on how it has been processed; Right to Rectification — request correction of inaccurate or incomplete data; Right to Object — object to processing for purposes other than those you consented to, particularly for direct marketing; Right to Erasure / Blocking — request deletion or blocking of data that is no longer necessary or was unlawfully processed, subject to the Bank's legal retention obligations; Right to Data Portability — request your personal data in a machine-readable format for transfer to another controller, where technically feasible; Right to Damages — seek compensation for damages caused by inaccurate, incomplete, or unauthorized use of your personal data; Right to File a Complaint — file a complaint with the National Privacy Commission (NPC) at complaints@privacy.gov.ph or www.privacy.gov.ph. To exercise any of these rights, contact the Bank's Data Privacy Officer at dpo@rbhermosa.com.ph."},{"heading":"7. Security","body":"We protect your data using AES-256 encryption for data at rest and TLS 1.2 or higher for data in transit. Application logs are masked to remove personally identifiable information. Access to cloud infrastructure is governed by multi-factor authentication (MFA) and role-based access controls. The platform undergoes regular penetration testing and independent security audits."},{"heading":"8. Children's privacy","body":"The app is intended for users 18 years of age and older. We do not knowingly collect data from minors. If you believe a minor's data has been submitted, contact us immediately."},{"heading":"9. Changes to this policy","body":"We may update this policy from time to time. When we do, we will post the updated version here and revise the effective date above. Continued use of the app after changes constitutes acceptance of the updated policy."},{"heading":"10. Contact us","body":"Rural Bank of Hermosa (Bataan), Incorporated | Burgos St., Poblacion, Hermosa, Bataan | Email: support@rbhermosa.com.ph | Phone: 09859700110 | Data Privacy Officer: dpo@rbhermosa.com.ph"}]},"deletion":{"label":"Account & Data","heading":"Request Account or Data Deletion","intro":"You may request the deletion of your Rural Bank of Hermosa (Bataan), Inc. mobile banking account and the personal data associated with it. Please read the information below before submitting your request.","whatItMeans":"Deleting your account will permanently remove your access to the Rural Bank of Hermosa (Bataan), Inc. mobile app. Your bank account itself remains open unless you separately visit a branch to close it. Transaction records are retained for a minimum of 10 years as required by the Bangko Sentral ng Pilipinas (BSP) and the Anti-Money Laundering Act (AMLA).","steps":[{"title":"Settle any pending transactions","body":"Ensure no pending transfers, bills payments, or loan obligations are tied to your app account."},{"title":"Submit this form","body":"Fill out the request form below. We will verify your identity before processing."},{"title":"Identity verification","body":"Our team will contact you within 3 business days to confirm your identity via your registered mobile number or email."},{"title":"Deletion completed","body":"Once verified, your app account and non-regulated personal data will be deleted within 15 business days. A confirmation will be sent to your registered email."}],"form":{"fields":[{"name":"fullName","label":"Full name","type":"text"},{"name":"accountNumber","label":"Account number","type":"text"},{"name":"email","label":"Registered email","type":"email"},{"name":"reason","label":"Reason for deletion","type":"select","options":["No longer using the app","Privacy concerns","Switching to another bank","Other"]}],"disclaimer":"By submitting, you confirm that you are the registered account holder. We will contact you to verify your identity before proceeding with the deletion."}},"links":{"androidUrl":"","iosUrl":""},"footer":{"trustBadge":"Regulated by the BSP • Deposits insured by PDIC"},"tokens":{"color-primary":"#002060","color-accent":"#EAC200","color-highlight":"#50ABE4","color-bg":"#F2F2F2","color-surface":"#FFFFFF","header-bg":"#EAC200","header-accent":"#E97132","header-text":"#000000","header-subtitle":"#E97132","header-nav":"#002060","header-nav-hover":"#E97132","logo-size":"58px","section-label":"#E97132","btn-primary-bg":"#002060","card-accent":"#EAC200","hero-from":"#F7F9FC","hero-via":"#F1F5FA","hero-to":"#E9F1F8","hero-text":"#002060","hero-subtext":"#3A4D73","hero-accent-text":"#002060","hero-badge-bg":"#E97132","hero-badge-border":"#E97132","hero-badge-text":"#FFFFFF","pill-bg":"#50ABE4","pill-border":"#50ABE4","pill-text":"#FFFFFF"}};</script>
+</head>
+<body class="preload">
+
+<!-- ══════════════════════════════════════════════════════════════════
+     HEADER
+══════════════════════════════════════════════════════════════════════ -->
+<header>
+  <div class="header-inner">
+    <div class="logo-wrap">
+      <div class="logo-icon">
+        <img src="logo.png" alt="Company Logo" data-attr-src="brand.logoUrl" data-attr-alt="brand.name">
+        <span class="logo-fallback" data-text="brand.shortName">CN</span>
+      </div>
+      <div class="logo-text">
+        <strong data-text="brand.name">Company Name</strong>
+        <span data-text="brand.tagline">Tagline goes here</span>
+      </div>
+    </div>
+
+    <nav>
+      <a href="#about">About</a>
+      <a href="#offerings">Offerings</a>
+      <a href="#support">Support</a>
+      <a href="#privacy">Privacy</a>
+      <a href="#deletion">Data Deletion</a>
+    </nav>
+
+    <button class="hamburger" onclick="toggleMenu()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <div class="mobile-nav" id="mobileNav">
+    <a href="#about"     onclick="toggleMenu()">About the Bank</a>
+    <a href="#offerings" onclick="toggleMenu()">Bank Offerings</a>
+    <a href="#support"   onclick="toggleMenu()">Support &amp; Contact</a>
+    <a href="#privacy"   onclick="toggleMenu()">Privacy Policy</a>
+    <a href="#deletion"  onclick="toggleMenu()">Data Deletion</a>
+  </div>
+</header>
+
+
+<!-- ══════════════════════════════════════════════════════════════════
+     HERO
+══════════════════════════════════════════════════════════════════════ -->
+<section class="hero" id="about">
+  <div class="hero-inner">
+   <div class="hero-copy">
+    <div class="hero-badge" data-text="hero.badge">Tagline Placeholder</div>
+
+    <h1><span data-text="hero.headlineLead">Lorem Ipsum with</span> <span class="hl" data-text="hero.headlineAccent">Dolor Sit</span></h1>
+
+    <p data-text="hero.subhead">
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod
+      tempor incididunt ut labore et dolore magna aliqua, ut enim ad minim
+      veniam, quis nostrud exercitation ullamco.
+    </p>
+
+    <div class="hero-features">
+      <div class="feature-pill">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        <span data-text="hero.pills.0.label">Feature One</span>
+      </div>
+      <div class="feature-pill">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        <span data-text="hero.pills.1.label">Feature Two</span>
+      </div>
+      <div class="feature-pill">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span data-text="hero.pills.2.label">Feature Three</span>
+      </div>
+      <div class="feature-pill">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span data-text="hero.pills.3.label">Feature Four</span>
+      </div>
+    </div>
+
+    <div class="store-buttons">
+      <!-- href is bound to links.androidUrl; falls back to "#" until set -->
+      <a href="#" class="btn-store" data-attr-href="links.androidUrl">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+          <path d="M3 20.5v-17c0-.83 1-.97 1.45-.5L14 12l-9.55 8.97C4 21.47 3 21.33 3 20.5z" fill="#4CAF50"/>
+          <path d="M16.5 10.26L5.6 3.74 14 12l2.5-1.74z" fill="#81C784"/>
+          <path d="M16.5 13.74L14 12l2.5 1.74 2.3-1.28c.66-.37.66-1.23 0-1.6l-2.3-1.26z" fill="#FF7043"/>
+          <path d="M5.6 20.26L16.5 13.74 14 12 5.6 20.26z" fill="#FFCA28"/>
+        </svg>
+        <div class="btn-store-text">
+          <small>Get it on</small>
+          <span>Google Play</span>
+        </div>
+      </a>
+    </div>
+   </div><!-- /.hero-copy -->
+
+   <div class="hero-visual">
+     <img class="hero-image" data-attr-src="hero.image" alt="">
+   </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════════════
+     BANK OFFERINGS  ("What You Can Do")
+     Cards are rendered from offerings.items[] via the data-list loader.
+══════════════════════════════════════════════════════════════════════ -->
+<section class="section" id="offerings">
+  <div class="container">
+    <span class="section-label" data-text="offerings.label">Section Label</span>
+    <h2 data-text="offerings.heading">Bank Offerings</h2>
+    <p data-text="offerings.intro">Explore the products and services we offer.</p>
+
+    <div class="features-grid" data-list="offerings.items">
+      <template>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.5 2.5 4.5-5"/></svg>
+          </div>
+          <h3 data-text="title">Offering</h3>
+          <p data-text="body">Description</p>
+        </div>
+      </template>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════════════
+     SUPPORT & CONTACT
+══════════════════════════════════════════════════════════════════════ -->
+<section class="section section--alt" id="support">
+  <div class="container">
+    <span class="section-label" data-text="support.label">Section Label</span>
+    <h2 data-text="support.heading">Lorem Ipsum Dolor</h2>
+    <p data-text="support.intro">
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+      incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
+      nostrud exercitation ullamco laboris.
+    </p>
+
+    <div class="contact-grid">
+      <div class="contact-card">
+        <div class="contact-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        </div>
+        <div>
+          <h3>Support Email</h3>
+          <p><a href="mailto:support@example.com" data-attr-href="support.emailHref" data-text="support.email">support@example.com</a></p>
+          <small>Lorem ipsum dolor sit amet</small>
+        </div>
+      </div>
+
+      <div class="contact-card">
+        <div class="contact-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.79 19.79 0 0 1 11.6 19a19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 3.1 4.18 2 2 0 0 1 5.08 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.68 2.81a2 2 0 0 1-.45 2.11L9.09 9.91A16 16 0 0 0 15 15.91l1.27-1.27a2 2 0 0 1 2.11-.45c.9.32 1.85.55 2.81.68A2 2 0 0 1 22 16.92z"/></svg>
+        </div>
+        <div>
+          <h3>Contact Number</h3>
+          <p><a href="tel:+10000000000" data-attr-href="support.phoneHref" data-text="support.phone">(000) 000-0000</a></p>
+          <small>Monday – Friday, 8:00 AM – 5:00 PM</small>
+        </div>
+      </div>
+
+      <div class="contact-card">
+        <div class="contact-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        </div>
+        <div>
+          <h3>Head Office Address</h3>
+          <p data-text="support.address">123 Lorem Street, City, Country</p>
+          <small data-text="brand.name">Company Name</small>
+        </div>
+      </div>
+
+      <div class="contact-card">
+        <div class="contact-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <div>
+          <h3>Business Hours</h3>
+          <p data-text="support.hours">Mon – Fri: 8:00 AM – 5:00 PM</p>
+          <small data-text="support.hoursNote">Saturdays and holidays may vary</small>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════════════
+     PRIVACY POLICY
+══════════════════════════════════════════════════════════════════════ -->
+<section class="section" id="privacy">
+  <div class="container">
+    <span class="section-label" data-text="privacy.label">Section Label</span>
+    <h2 data-text="privacy.heading">Privacy Policy</h2>
+    <p data-text="privacy.intro">
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+      incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+      exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+    </p>
+
+    <div class="policy-box">
+      <div class="policy-cta">
+        <p>
+          Read how we collect, use, share, retain, and protect your personal
+          data — and your rights under the Data Privacy Act of 2012 (RA 10173).
+        </p>
+        <button type="button" class="btn-primary" onclick="openPrivacy()">View Privacy Policy</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════════════
+     DATA DELETION
+     Steps rendered from deletion.steps[]; the request form is built from
+     deletion.form.fields[] by the loader (rudimentary — no backend).
+══════════════════════════════════════════════════════════════════════ -->
+<section class="section section--alt" id="deletion">
+  <div class="container">
+    <span class="section-label" data-text="deletion.label">Account &amp; Data</span>
+    <h2 data-text="deletion.heading">Request Account or Data Deletion</h2>
+    <p data-text="deletion.intro">You may request the deletion of your account and associated data.</p>
+
+    <div class="deletion-note">
+      <strong>What deletion means</strong>
+      <p data-text="deletion.whatItMeans">Deleting your account permanently removes app access.</p>
+    </div>
+
+    <ol class="deletion-steps" data-list="deletion.steps">
+      <template>
+        <li><strong data-text="title">Step</strong><span data-text="body">Detail</span></li>
+      </template>
+    </ol>
+
+    <form class="deletion-form" id="deletionForm" onsubmit="return submitDeletion(event)">
+      <div id="deletionFields"></div>
+      <p class="deletion-disclaimer" data-text="deletion.form.disclaimer">Disclaimer.</p>
+      <button type="submit" class="btn-primary">Submit Request</button>
+      <p class="deletion-success">✓ Your request has been recorded. We'll contact you to verify your identity before processing.</p>
+    </form>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════════════
+     FOOTER
+══════════════════════════════════════════════════════════════════════ -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <strong data-text="brand.name">Company Name</strong>
+      <span data-text="brand.location">City, Country</span>
+    </div>
+    <div class="footer-links">
+      <a href="#about">About the Bank</a>
+      <a href="#offerings">Offerings</a>
+      <a href="#support">Support &amp; Contact</a>
+      <a href="#privacy">Privacy Policy</a>
+      <a href="#deletion">Data Deletion</a>
+      <a href="mailto:support@example.com" data-attr-href="support.emailHref" data-text="support.email">support@example.com</a>
+    </div>
+  </div>
+
+  <div class="footer-divider"></div>
+
+  <div class="footer-bottom">
+    <span>&copy; <span id="yr"></span> <span data-text="brand.name">Company Name</span>. All rights reserved.</span>
+    <div class="trust-badge">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      <span data-text="footer.trustBadge">Lorem ipsum dolor sit amet</span>
+    </div>
+  </div>
+</footer>
+
+
+<!-- ══════════════════════════════════════════════════════════════════
+     PRIVACY POLICY MODAL
+     Sections rendered from privacy.sections[] via the data-list loader.
+══════════════════════════════════════════════════════════════════════ -->
+<div class="modal-overlay" id="privacyModal" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="pmTitle">
+    <div class="modal-head">
+      <h3 id="pmTitle" data-text="privacy.heading">Privacy Policy</h3>
+      <button class="modal-close" onclick="closePrivacy()" aria-label="Close">&times;</button>
+    </div>
+    <div class="modal-body">
+      <p class="modal-eff" data-text="privacy.effectiveDate"></p>
+      <div data-list="privacy.sections">
+        <template>
+          <section class="policy-section">
+            <h4 data-text="heading">Section</h4>
+            <p data-text="body">Body</p>
+          </section>
+        </template>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  // ─── Static UI behavior ──────────────────────────────────────────
+  // Auto-update copyright year
+  document.getElementById('yr').textContent = new Date().getFullYear();
+
+  // Mobile nav toggle
+  function toggleMenu() {
+    document.getElementById('mobileNav').classList.toggle('open');
+  }
+
+  // Close mobile nav on outside click
+  document.addEventListener('click', function (e) {
+    const nav = document.getElementById('mobileNav');
+    const btn = document.querySelector('.hamburger');
+    if (nav.classList.contains('open') && !nav.contains(e.target) && !btn.contains(e.target)) {
+      nav.classList.remove('open');
+    }
+  });
+
+  // ─── Privacy policy modal ────────────────────────────────────────
+  function openPrivacy() {
+    const m = document.getElementById('privacyModal');
+    if (m) { m.hidden = false; document.body.classList.add('modal-open'); }
+  }
+  function closePrivacy() {
+    const m = document.getElementById('privacyModal');
+    if (m) { m.hidden = true; document.body.classList.remove('modal-open'); }
+  }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closePrivacy(); });
+  document.addEventListener('click', e => {
+    const m = document.getElementById('privacyModal');
+    if (m && !m.hidden && e.target === m) closePrivacy();  // click on backdrop
+  });
+
+  // ─── Data-deletion form (rudimentary — no backend) ───────────────
+  // Records the request client-side and shows a confirmation. Wire to a
+  // real endpoint / mailto when a backend is available.
+  function submitDeletion(e) {
+    e.preventDefault();
+    e.currentTarget.classList.add('sent');
+    return false;
+  }
+</script>
+
+<script>
+  // ─── Tenant theming loader ───────────────────────────────────────
+  // Resolves a config object, then applies design tokens + content.
+  //
+  //   Mode A (edge):    a Pages Function injected `window.__TENANT__`.
+  //   Mode B (runtime): fetch `${base}/${slug}.json` from the meta tag,
+  //                     where slug = ?tenant=… (default "default").
+  (function () {
+    const reveal = () => document.body.classList.remove('preload');
+
+    // Safety net: never leave the page hidden, even on a hung request.
+    const failsafe = setTimeout(reveal, 2500);
+
+    const getPath = (obj, path) =>
+      path.split('.').reduce((o, k) => (o == null ? o : o[k]), obj);
+
+    function applyTokens(tokens) {
+      if (!tokens || typeof tokens !== 'object') return;
+      const root = document.documentElement;
+      for (const [name, value] of Object.entries(tokens)) {
+        const prop = name.startsWith('--') ? name : '--' + name;
+        root.style.setProperty(prop, value);
+      }
+    }
+
+    function applyContent(data) {
+      // <title> / meta description
+      if (data?.meta?.title) document.title = data.meta.title;
+      if (data?.meta?.description) {
+        document.querySelector('meta[name="description"]')
+          ?.setAttribute('content', data.meta.description);
+      }
+
+      // textContent bindings
+      document.querySelectorAll('[data-text]').forEach(el => {
+        const v = getPath(data, el.dataset.text);
+        if (v != null) el.textContent = v;
+      });
+
+      // attribute bindings: data-attr-href, data-attr-src, data-attr-alt
+      ['href', 'src', 'alt'].forEach(attr => {
+        document.querySelectorAll('[data-attr-' + attr + ']').forEach(el => {
+          const v = getPath(data, el.getAttribute('data-attr-' + attr));
+          if (v != null) el.setAttribute(attr, v);
+        });
+      });
+    }
+
+    // Repeating lists: <el data-list="path.to.array"><template>…</template></el>
+    // For each array item the <template> is cloned; bindings inside resolve
+    // relative to the item (data-text="title" → item.title).
+    function applyLists(data) {
+      document.querySelectorAll('[data-list]').forEach(host => {
+        const arr = getPath(data, host.dataset.list);
+        const tpl = host.querySelector(':scope > template');
+        if (!Array.isArray(arr) || !tpl) return;
+        const frag = document.createDocumentFragment();
+        arr.forEach(item => {
+          const node = tpl.content.cloneNode(true);
+          node.querySelectorAll('[data-text]').forEach(el => {
+            const v = getPath(item, el.dataset.text);
+            if (v != null) el.textContent = v;
+            el.removeAttribute('data-text');
+          });
+          ['href', 'src', 'alt'].forEach(attr => {
+            node.querySelectorAll('[data-attr-' + attr + ']').forEach(el => {
+              const v = getPath(item, el.getAttribute('data-attr-' + attr));
+              if (v != null) el.setAttribute(attr, v);
+              el.removeAttribute('data-attr-' + attr);
+            });
+          });
+          frag.appendChild(node);
+        });
+        host.appendChild(frag);
+      });
+    }
+
+    // Build the account/data-deletion request form from deletion.form.fields[].
+    function renderDeletionForm(data) {
+      const fields = data && data.deletion && data.deletion.form && data.deletion.form.fields;
+      const mount = document.getElementById('deletionFields');
+      if (!mount || !Array.isArray(fields)) return;
+      fields.forEach(f => {
+        const wrap = document.createElement('div');
+        wrap.className = 'field';
+        const id = 'del-' + f.name;
+
+        const label = document.createElement('label');
+        label.setAttribute('for', id);
+        label.textContent = f.label || f.name;
+
+        let input;
+        if (f.type === 'select') {
+          input = document.createElement('select');
+          (f.options || []).forEach(opt => {
+            const o = document.createElement('option');
+            o.value = opt; o.textContent = opt;
+            input.appendChild(o);
+          });
+        } else {
+          input = document.createElement('input');
+          input.type = f.type || 'text';
+        }
+        input.id = id;
+        input.name = f.name;
+
+        wrap.appendChild(label);
+        wrap.appendChild(input);
+        mount.appendChild(wrap);
+      });
+    }
+
+    async function resolveConfig() {
+      // Mode A — config already present (injected at the edge).
+      if (window.__TENANT__) return window.__TENANT__;
+
+      // Mode B — fetch from S3 (or any CORS-enabled origin).
+      const base = document.querySelector('meta[name="tenant-config-base"]')?.content;
+      if (!base || base.includes('YOUR_BUCKET')) return null; // not configured yet
+      const slug = new URLSearchParams(location.search).get('tenant') || 'default';
+
+      const res = await fetch(base.replace(/\/$/, '') + '/' + slug + '.json', { mode: 'cors' });
+      if (!res.ok) throw new Error('tenant config ' + res.status);
+      return res.json();
+    }
+
+    resolveConfig()
+      .then(data => {
+        if (data) {
+          applyTokens(data.tokens);
+          applyContent(data);
+          applyLists(data);
+          renderDeletionForm(data);
+        }
+      })
+      .catch(err => console.error('[tenant] config load failed, using defaults:', err))
+      .finally(() => { clearTimeout(failsafe); reveal(); });
+  })();
+</script>
+
+</body>
+</html>

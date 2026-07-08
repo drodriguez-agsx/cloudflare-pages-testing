@@ -1,0 +1,12 @@
+{
+  "name": "multi-tenant-landing",
+  "version": "1.0.0",
+  "description": "Data-driven multi-tenant landing template + per-tenant static site generator for Cloudflare Pages.",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs",
+    "preview": "wrangler pages dev public",
+    "serve": "serve public"
+  }
+}

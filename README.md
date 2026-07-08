@@ -6,12 +6,29 @@ contact details — all driven by data.
 
 ```
 .
-├── index.html              # The template (markup + CSS tokens + loader)
-├── tenant.example.json     # Reference config — copy this per tenant
-├── functions/
-│   └── _middleware.js      # Optional: edge theming Pages Function (Mode A)
+├── public/                 # ← Cloudflare Pages build output directory (deployed)
+│   └── index.html          #   The template (markup + CSS tokens + loader)
+├── functions/              # Pages Functions (compiled separately, NOT a static asset)
+│   └── _middleware.js      #   Edge theming Pages Function (Mode A)
+├── tenants/                # Per-tenant SOURCE content (git-tracked, dev-only)
+│   └── hermosa/            #   One folder per tenant: config + its assets
+│       ├── tenant.json     #     Tenant content (see schema below)
+│       ├── logo.png        #     Logo asset (referenced by relative path)
+│       └── hero.png        #     Hero image asset
+├── dist/                   # GENERATED staging gallery + per-tenant bakes (COMMITTED)
+│   ├── index.html          #   Tenant gallery (links to each /<slug>/)
+│   └── hermosa/            #   Baked, self-contained tenant bundle
+├── tenant.example.json     # Reference config — copy this per tenant (dev-only, not deployed)
+├── palette-reference.jpg   # Design reference (dev-only, not deployed)
+├── docs/                   # RFCs and design notes (dev-only, not deployed)
 └── README.md
 ```
+
+> **What gets deployed:** only the contents of `public/` (static assets) plus the
+> `functions/` directory (resolved from the repo root, not the output dir).
+> Everything else — `docs/`, `tenant.example.json`, `palette-reference.jpg`,
+> this README — stays in the repo but is **never served**. To make a file
+> publicly reachable, it must live under `public/`.
 
 > ## ⚠️ TEMPORARY DEMO MODE — REMOVE BEFORE PRODUCTION
 >
@@ -165,22 +182,70 @@ No code change, no redeploy — it's just data.
 
 ---
 
-## Local preview
+## Generate per-tenant bundles
 
-It's a static page. From this directory:
+For the distribution model (each tenant self-hosts on their own account — see
+[RFC-002](docs/rfc-002-git-connected-tenant-deploy.md)), `build.mjs` renders the
+template + a tenant's source (`tenants/<slug>/`) into a **self-contained** static
+bundle under `dist/<slug>/` (config inlined, assets copied, no runtime fetch).
 
 ```bash
-npx serve .          # or: python3 -m http.server
+npm run build              # build every tenant under tenants/
+npm run build -- hermosa   # build one tenant (note the `--`)
+node build.mjs hermosa     # same, without npm
+```
+
+Each `dist/<slug>/` is drop-anywhere static — deploy it to the tenant's own
+Cloudflare Pages account (or any static host).
+
+`dist/` is **committed** (see next section). Re-run `npm run build` after any
+change to `tenants/` or `public/index.html`, then commit the regenerated `dist/`.
+
+---
+
+## Staging preview (team-facing gallery)
+
+`npm run build` also writes **`dist/index.html`** — a gallery linking every built
+tenant, so the whole team can browse the real outputs from one URL. Because the
+bundles are self-contained, each `/<slug>/` renders with correct assets (no
+`?tenant=` param, no config fetch).
+
+Deploy it as its own Cloudflare Pages project:
+
+- **Connect the repo** (or push `dist/` to a delivery repo), then:
+- **Build command:** `npm run build` &nbsp;·&nbsp; **Build output directory:** `dist`
+- Or, no build step: set output dir to `dist` and rely on the committed files.
+
+The team then visits the staging URL → gallery → `/<slug>/` for each tenant.
+
+> This is the "factory + staging preview" role: the central repo generates and
+> previews all tenants; individual tenants still self-host their own `dist/<slug>/`
+> bundle (RFC-002). Local check: `npx serve dist` then open the gallery.
+
+---
+
+## Local preview
+
+It's a static page. From the repo root:
+
+```bash
+npx serve public          # or: python3 -m http.server -d public
 ```
 
 Then open `http://localhost:3000/?tenant=acme`. Note: Pages Functions
-(`functions/`) only run on Cloudflare — use `npx wrangler pages dev .` to test
-edge injection locally.
+(`functions/`) only run on Cloudflare — use `npx wrangler pages dev public` to
+test edge injection locally (serves `public/` and picks up `./functions`).
 
 ## Deploy to Cloudflare Pages
 
 - **Build command:** _(none — static)_
-- **Build output directory:** `/` (repo root)
+- **Build output directory:** `public`
 - **Environment variable:** `TENANT_CONFIG_BASE` (only needed for Mode A)
 
-Pages auto-detects the `functions/` directory and wires up the middleware.
+Pages serves the contents of `public/` and auto-detects the `functions/`
+directory (at the repo root) to wire up the middleware.
+
+> ⚠️ **If you already deployed with build output `/`:** update the Pages project
+> setting **Build output directory** from `/` to `public`, otherwise the next
+> deploy will 404 (it'll look for assets in the wrong place, and `docs/` etc.
+> would go back to being served).

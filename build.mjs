@@ -47,7 +47,9 @@ function render(template, config, slug) {
 
   // 1. Drop the Mode-B config-fetch <meta> (and its now-moot doc comment) —
   //    the bundle carries its own config.
-  html = html.replace(/\n?[ \t]*<!--[\s\S]*?TENANT CONFIG SOURCE[\s\S]*?-->/i, '');
+  // Match only the config-source comment itself — the (?!-->) guard stops the
+  // match from spanning across an earlier, unrelated comment's close.
+  html = html.replace(/\n?[ \t]*<!--(?:(?!-->)[\s\S])*?TENANT CONFIG SOURCE[\s\S]*?-->/i, '');
   html = html.replace(/\n?[ \t]*<meta name="tenant-config-base"[^>]*>/i, '');
 
   // 2. Bake <title> + description so the head is correct even before JS runs.

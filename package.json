@@ -6,7 +6,11 @@
   "type": "module",
   "scripts": {
     "build": "node build.mjs",
-    "preview": "wrangler pages dev public",
-    "serve": "serve public"
+    "preview": "wrangler dev",
+    "serve": "serve public",
+    "deploy": "wrangler deploy"
+  },
+  "devDependencies": {
+    "wrangler": "^4.107.1"
   }
 }

@@ -468,6 +468,31 @@
     /* No hero image → let the copy use the full width, centered. */
     .hero-visual:not(:has(.hero-image[src])) { display: none; }
 
+    /* ─── About block (bank description + facts, below the hero band) ── */
+    .hero-about {
+      position: relative;
+      max-width: 760px;
+      margin: 48px auto 0;
+      padding-top: 32px;
+      border-top: 1px solid color-mix(in srgb, var(--hero-text) 18%, transparent);
+      text-align: left;
+    }
+    .hero-about-body p {
+      color: var(--hero-subtext);
+      font-size: .98rem;
+      line-height: 1.7;
+      margin-bottom: 12px;
+    }
+    .hero-about-body p:last-child { margin-bottom: 0; }
+    .hero-facts { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 14px 40px; margin: 0 0 24px; }
+    .fact { display: flex; flex-direction: column; gap: 3px; }
+    .fact:last-child { align-items: flex-end; text-align: right; }   /* pin to opposite end */
+    .fact-k {
+      font-size: .7rem; font-weight: 700; letter-spacing: .1em;
+      text-transform: uppercase; color: var(--section-label);
+    }
+    .fact-v { font-size: .98rem; font-weight: 700; color: var(--hero-text); }
+
     /* ─── Offerings icon (tokenized so it follows the tenant palette) ── */
     .feature-card .feature-icon svg { stroke: var(--color-primary); }
 
@@ -702,6 +727,23 @@
    <div class="hero-visual">
      <img class="hero-image" data-attr-src="hero.image" alt="">
    </div>
+  </div>
+
+  <!-- About the bank — key facts as a lead-in, then the description. -->
+  <div class="hero-about">
+    <div class="hero-facts">
+      <div class="fact">
+        <span class="fact-k">Established</span>
+        <span class="fact-v" data-text="about.yearEstablished">—</span>
+      </div>
+      <div class="fact">
+        <span class="fact-k">Areas Served</span>
+        <span class="fact-v" data-text="about.areasServed">—</span>
+      </div>
+    </div>
+    <div class="hero-about-body" data-list="about.paragraphs">
+      <template><p data-text=".">About paragraph.</p></template>
+    </div>
   </div>
 </section>
 
@@ -1011,7 +1053,9 @@
         arr.forEach(item => {
           const node = tpl.content.cloneNode(true);
           node.querySelectorAll('[data-text]').forEach(el => {
-            const v = getPath(item, el.dataset.text);
+            const key = el.dataset.text;
+            // data-text="." (or "") binds the item itself — for arrays of strings.
+            const v = (key === '.' || key === '') ? item : getPath(item, key);
             if (v != null) el.textContent = v;
             el.removeAttribute('data-text');
           });

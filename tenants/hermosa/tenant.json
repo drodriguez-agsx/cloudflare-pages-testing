@@ -57,9 +57,12 @@
     "intro": "For any questions, concerns, or technical issues with the app, reach out through any channel below.",
     "email": "support@rbhermosa.com.ph",
     "emailHref": "mailto:support@rbhermosa.com.ph",
+    "emailNote": "Typical response within 1 business day.",
     "phone": "09859700110",
     "phoneHref": "tel:09859700110",
+    "phoneNote": "Phone support: Mon – Fri, 8:30 AM – 3:30 PM",
     "address": "Burgos St. (Poblacion), Hermosa, Bataan",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Rural+Bank+of+Hermosa+Bataan",
     "hours": "Mon – Fri, 8:30 AM – 3:30 PM",
     "hoursNote": "Saturdays and holidays may vary"
   },
@@ -100,20 +103,13 @@
     "whatItMeans": "Deleting your account will permanently remove your access to the Rural Bank of Hermosa (Bataan), Inc. mobile app. Your bank account itself remains open unless you separately visit a branch to close it. Transaction records are retained for a minimum of 10 years as required by the Bangko Sentral ng Pilipinas (BSP) and the Anti-Money Laundering Act (AMLA).",
     "steps": [
       { "title": "Settle any pending transactions", "body": "Ensure no pending transfers, bills payments, or loan obligations are tied to your app account." },
-      { "title": "Submit this form",                "body": "Fill out the request form below. We will verify your identity before processing." },
-      { "title": "Identity verification",           "body": "Our team will contact you within 3 business days to confirm your identity via your registered mobile number or email." },
-      { "title": "Deletion completed",              "body": "Once verified, your app account and non-regulated personal data will be deleted within 15 business days. A confirmation will be sent to your registered email." }
-    ],
-    "form": {
-      "fields": [
-        { "name": "fullName",      "label": "Full name",           "type": "text" },
-        { "name": "accountNumber", "label": "Account number",      "type": "text" },
-        { "name": "email",         "label": "Registered email",    "type": "email" },
-        { "name": "reason",        "label": "Reason for deletion",  "type": "select",
-          "options": [ "No longer using the app", "Privacy concerns", "Switching to another bank", "Other" ] }
-      ],
-      "disclaimer": "By submitting, you confirm that you are the registered account holder. We will contact you to verify your identity before proceeding with the deletion."
-    }
+      { "title": "Submit your request", "body": "Request the deletion of your account and personal data using either of the following methods:",
+        "methods": [
+          { "title": "Email us", "body": "Send an email to support@rbhermosa.com.ph with the subject \"Delete My Account\". Please send it from the email address registered to your app account so we can verify your identity." },
+          { "title": "Visit a branch", "body": "Go to any Rural Bank of Hermosa (Bataan), Inc. branch and request account or data deletion in person. Please bring a valid government-issued ID." }
+        ] },
+      { "title": "Deletion completed", "body": "Once verified, your app account and non-regulated personal data will be deleted within 15 business days. A confirmation will be sent to your registered email." }
+    ]
   },
 
   "links": {
@@ -135,7 +131,7 @@
     "header-bg":        "#EAC200",
     "header-accent":    "#E97132",
     "header-text":      "#000000",
-    "header-subtitle":  "#E97132",
+    "header-subtitle":  "#002060",
     "header-nav":       "#002060",
     "header-nav-hover": "#E97132",
     "logo-size":        "58px",

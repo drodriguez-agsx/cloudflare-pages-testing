@@ -132,8 +132,8 @@
         "body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris."
       },
       {
-        "title": "Submit this form",
-        "body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris."
+        "title": "Send your request by email",
+        "body": "To request account or data deletion, send an email to care@coral.example with your full name and account number. We will verify your identity before processing."
       },
       {
         "title": "Identity verification",
@@ -143,38 +143,7 @@
         "title": "Deletion completed",
         "body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris."
       }
-    ],
-    "form": {
-      "fields": [
-        {
-          "name": "fullName",
-          "label": "Full name",
-          "type": "text"
-        },
-        {
-          "name": "accountNumber",
-          "label": "Account number",
-          "type": "text"
-        },
-        {
-          "name": "email",
-          "label": "Registered email",
-          "type": "email"
-        },
-        {
-          "name": "reason",
-          "label": "Reason for deletion",
-          "type": "select",
-          "options": [
-            "No longer using the app",
-            "Privacy concerns",
-            "Switching to another bank",
-            "Other"
-          ]
-        }
-      ],
-      "disclaimer": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris."
-    }
+    ]
   },
   "links": {
     "androidUrl": "#",

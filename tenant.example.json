@@ -56,10 +56,12 @@
     "intro": "For any questions, concerns, or technical issues with the app, reach out through any channel below.",
     "email": "support@acmebank.example",
     "emailHref": "mailto:support@acmebank.example",
-    "emailNote": "",
+    "emailNote": "Typical response within 1 business day.",
     "phone": "(02) 8123-4567",
     "phoneHref": "tel:+63281234567",
+    "phoneNote": "Phone support: Mon – Fri, 8:00 AM – 5:00 PM",
     "address": "123 Main Street, Metro City, Country",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Acme+Bank+Metro+City",
     "hours": "Mon – Fri: 8:00 AM – 5:00 PM",
     "hoursNote": "Saturdays and holidays may vary"
   },
@@ -88,20 +90,13 @@
     "whatItMeans": "Deleting your account permanently removes your app access. Transaction records may be retained for a period required by law.",
     "steps": [
       { "title": "Settle pending transactions", "body": "Ensure no pending transfers, payments, or loan obligations remain." },
-      { "title": "Submit this form",            "body": "Fill out the request form below. We verify your identity before processing." },
-      { "title": "Identity verification",       "body": "Our team contacts you within 3 business days to confirm your identity." },
+      { "title": "Submit your request", "body": "Request the deletion of your account and personal data using either of the following methods:",
+        "methods": [
+          { "title": "Email us", "body": "Send an email to support@acmebank.example with the subject \"Delete My Account\", from the address registered to your account so we can verify your identity." },
+          { "title": "Visit a branch", "body": "Visit any branch and request account or data deletion in person. Please bring a valid government-issued ID." }
+        ] },
       { "title": "Deletion completed",          "body": "Your app account and non-regulated data are deleted within 15 business days." }
-    ],
-    "form": {
-      "fields": [
-        { "name": "fullName",      "label": "Full name",          "type": "text" },
-        { "name": "accountNumber", "label": "Account number",     "type": "text" },
-        { "name": "email",         "label": "Registered email",   "type": "email" },
-        { "name": "reason",        "label": "Reason for deletion", "type": "select",
-          "options": ["No longer using the app", "Privacy concerns", "Switching to another bank", "Other"] }
-      ],
-      "disclaimer": "By submitting, you confirm that you are the registered account holder."
-    }
+    ]
   },
 
   "links": {

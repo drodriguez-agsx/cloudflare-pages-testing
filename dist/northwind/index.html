@@ -334,7 +334,8 @@
     /* ─── Support / Contact ────────────────────────────────────────── */
     #support .contact-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      grid-template-columns: repeat(2, 1fr);   /* 2×2 for the four cards */
+      align-items: stretch;                     /* equal-height cards per row */
       gap: 20px;
       margin-top: 36px;
     }
@@ -344,7 +345,7 @@
       padding: 24px 28px;
       box-shadow: var(--shadow);
       display: flex;
-      align-items: flex-start;
+      align-items: flex-start;                  /* content top-aligned */
       gap: 16px;
     }
     .contact-icon {
@@ -355,10 +356,26 @@
     }
     .contact-card > div { min-width: 0; }   /* allow the text column to shrink so long values wrap */
     .contact-card h3 { font-size: .85rem; font-weight: 700; color: var(--color-muted); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 4px; }
-    .contact-card p { font-size: 1rem; font-weight: 600; color: var(--color-primary); margin-bottom: 2px; overflow-wrap: anywhere; }
-    .contact-card p a { overflow-wrap: anywhere; }
+    .contact-card p { font-size: 1rem; font-weight: 600; color: var(--color-primary); margin-bottom: 2px; overflow-wrap: break-word; }
+    /* email / phone read as tappable links */
+    .contact-card p a {
+      color: var(--color-primary);
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 2px;
+      overflow-wrap: break-word;
+    }
+    .contact-card p a:hover { color: var(--color-primary-mid); }
     .contact-card small { font-size: .8rem; color: var(--color-muted); }
     .contact-card small:empty { display: none; }   /* blank when a tenant has no note */
+    .contact-card .map-link {
+      display: inline-block;
+      margin-top: 6px;
+      font-size: .8rem;
+      font-weight: 600;
+      color: var(--color-primary-mid);
+    }
+    .contact-card a.map-link:not([href]) { display: none; }   /* hidden until a map URL is set */
 
     /* ─── Privacy Policy ───────────────────────────────────────────── */
     #privacy .policy-box {
@@ -536,7 +553,7 @@
       display: grid;
       gap: 14px;
     }
-    .deletion-steps li {
+    .deletion-steps > li {
       counter-increment: step;
       background: var(--color-surface);
       border-radius: var(--radius);
@@ -544,7 +561,7 @@
       position: relative;
       box-shadow: var(--shadow);
     }
-    .deletion-steps li::before {
+    .deletion-steps > li::before {
       content: counter(step);
       position: absolute; left: 16px; top: 16px;
       width: 28px; height: 28px;
@@ -554,35 +571,18 @@
       display: flex; align-items: center; justify-content: center;
       font-size: .85rem; font-weight: 700;
     }
-    .deletion-steps li strong { display: block; color: var(--color-primary); font-size: .95rem; margin-bottom: 2px; }
-    .deletion-steps li span { font-size: .9rem; color: var(--color-text-muted); }
-    .deletion-form {
-      margin: 32px auto 0;
-      max-width: 560px;
-      background: var(--color-surface);
-      border-radius: var(--radius);
-      padding: 28px;
-      box-shadow: var(--shadow);
+    .deletion-steps > li > strong { display: block; color: var(--color-primary); font-size: .95rem; margin-bottom: 2px; }
+    .deletion-steps > li > span { font-size: .9rem; color: var(--color-text-muted); }
+    /* Consolidated-step sub-methods (e.g. Email us / Visit a branch). Empty when
+       a step has no methods, so it collapses with no gap. */
+    .deletion-methods { list-style: none; margin: 0; padding: 0; }
+    .deletion-methods li {
+      margin-top: 12px;
+      padding: 2px 0 2px 14px;
+      border-left: 2px solid var(--card-accent);
     }
-    .deletion-form .field { margin-bottom: 16px; }
-    .deletion-form label { display: block; font-size: .85rem; font-weight: 600; color: var(--color-primary); margin-bottom: 6px; }
-    .deletion-form input, .deletion-form select {
-      width: 100%;
-      padding: 10px 12px;
-      border: 1px solid var(--color-bg-alt);
-      border-radius: 8px;
-      font: inherit;
-      font-size: .95rem;
-      color: var(--color-text);
-      background: var(--color-bg);
-    }
-    .deletion-form input:focus, .deletion-form select:focus { outline: 2px solid var(--color-primary-mid); border-color: transparent; }
-    .deletion-disclaimer { font-size: .82rem; color: var(--color-muted); margin: 4px 0 18px; }
-    .deletion-success { display: none; color: var(--color-primary); font-weight: 600; margin: 0; }
-    .deletion-form.sent .field,
-    .deletion-form.sent .deletion-disclaimer,
-    .deletion-form.sent button { display: none; }
-    .deletion-form.sent .deletion-success { display: block; }
+    .deletion-methods li strong { display: block; color: var(--color-primary); font-size: .9rem; margin-bottom: 1px; }
+    .deletion-methods li span { font-size: .88rem; color: var(--color-text-muted); }
 
     /* ─── Modal (privacy policy) ───────────────────────────────────── */
     .modal-overlay {
@@ -633,6 +633,7 @@
     @media (max-width: 640px) {
       nav { display: none; }
       .hamburger { display: flex; }
+      #support .contact-grid { grid-template-columns: 1fr; }   /* stack cards on mobile */
       .section { padding: 52px 0; }
       .hero { padding: 56px 20px 52px; }
       .policy-box { padding: 24px 20px; }
@@ -650,7 +651,7 @@
   Source of truth: tenants/northwind/tenant.json (+ assets in that folder)
   Rebuild:         node build.mjs northwind
 -->
-  <script>window.__TENANT__={"meta":{"title":"Northwind Bank | Mobile App","description":"Northwind Bank — secure, convenient mobile banking. (Mock demo tenant.)"},"brand":{"name":"Northwind Bank","shortName":"NB","tagline":"Banking, due north","location":"Harbor City","logoUrl":"data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2211%22%20fill%3D%22%230b2a6b%22%2F%3E%3Ctext%20x%3D%2224%22%20y%3D%2232%22%20text-anchor%3D%22middle%22%20font-family%3D%22system-ui%2Csans-serif%22%20font-size%3D%2220%22%20font-weight%3D%22800%22%20fill%3D%22%23ffd95e%22%3ENB%3C%2Ftext%3E%3C%2Fsvg%3E"},"hero":{"badge":"Official Mobile App","headlineLead":"Northwind Bank","headlineAccent":"Mobile","subhead":"Secure, convenient, fully digital banking for the whole coast — anytime, anywhere.","pills":[{"label":"Secure Login"},{"label":"Instant Transfers"},{"label":"24/7 Access"},{"label":"Account Management"}]},"about":{"paragraphs":["Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.","Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris."],"yearEstablished":"1985","areasServed":"Harbor City & nearby"},"offerings":{"label":"What You Can Do","heading":"Bank Offerings","intro":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.","items":[{"title":"Deposit Accounts","body":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris."},{"title":"Fund Transfers","body":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris."},{"title":"Bills Payment","body":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris."},{"title":"Loans","body":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris."},{"title":"Account Management","body":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris."},{"title":"24/7 Support","body":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris."}]},"support":{"label":"App Support & Contact","heading":"We're Here to Help","intro":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.","email":"support@northwind.example","emailHref":"mailto:support@northwind.example","phone":"(02) 8123-4567","phoneHref":"tel:0281234567","address":"1 Harbor Plaza, Harbor City","hours":"Mon – Fri: 8:00 AM – 5:00 PM","hoursNote":"Saturdays and holidays may vary"},"privacy":{"label":"Legal & Data Privacy","heading":"Privacy Policy","intro":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.","effectiveDate":"January 1, 2026","sections":[{"heading":"1. Who we are","body":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris."},{"heading":"2. What data we collect","body":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris."},{"heading":"3. How we use your data","body":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris."},{"heading":"4. Data sharing","body":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris."},{"heading":"5. Data retention","body":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris."},{"heading":"6. Your rights","body":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris."},{"heading":"7. Security","body":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris."},{"heading":"8. Contact us","body":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris."}]},"deletion":{"label":"Account & Data","heading":"Request Account or Data Deletion","intro":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.","whatItMeans":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.","steps":[{"title":"Settle pending transactions","body":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris."},{"title":"Submit this form","body":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris."},{"title":"Identity verification","body":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris."},{"title":"Deletion completed","body":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris."}],"form":{"fields":[{"name":"fullName","label":"Full name","type":"text"},{"name":"accountNumber","label":"Account number","type":"text"},{"name":"email","label":"Registered email","type":"email"},{"name":"reason","label":"Reason for deletion","type":"select","options":["No longer using the app","Privacy concerns","Switching to another bank","Other"]}],"disclaimer":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris."}},"links":{"androidUrl":"#","iosUrl":"#"},"footer":{"trustBadge":"Member NDIC • Insured"},"tokens":{"color-primary":"#0b2a6b","color-primary-mid":"#1746b0","color-accent":"#f5b301","color-accent-lt":"#ffd95e","color-highlight":"#36c5d6","hero-to":"#2f6bff","btn-primary-bg":"#0b2a6b","card-accent":"#f5b301","section-label":"#f5b301"}};</script>
+  <script>window.__TENANT__={"meta":{"title":"Northwind Bank | Mobile App","description":"Northwind Bank — secure, convenient mobile banking. (Mock demo tenant.)"},"brand":{"name":"Northwind Bank","shortName":"NB","tagline":"Banking, due north","location":"Harbor City","logoUrl":"data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2211%22%20fill%3D%22%230b2a6b%22%2F%3E%3Ctext%20x%3D%2224%22%20y%3D%2232%22%20text-anchor%3D%22middle%22%20font-family%3D%22system-ui%2Csans-serif%22%20font-size%3D%2220%22%20font-weight%3D%22800%22%20fill%3D%22%23ffd95e%22%3ENB%3C%2Ftext%3E%3C%2Fsvg%3E"},"hero":{"badge":"Official Mobile App","headlineLead":"Northwind Bank","headlineAccent":"Mobile","subhead":"Secure, convenient, fully digital banking for the whole coast — anytime, anywhere.","pills":[{"label":"Secure Login"},{"label":"Instant Transfers"},{"label":"24/7 Access"},{"label":"Account Management"}]},"about":{"paragraphs":["Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.","Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris."],"yearEstablished":"1985","areasServed":"Harbor City & nearby"},"offerings":{"label":"What You Can Do","heading":"Bank Offerings","intro":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.","items":[{"title":"Deposit Accounts","body":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris."},{"title":"Fund Transfers","body":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris."},{"title":"Bills Payment","body":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris."},{"title":"Loans","body":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris."},{"title":"Account Management","body":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris."},{"title":"24/7 Support","body":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris."}]},"support":{"label":"App Support & Contact","heading":"We're Here to Help","intro":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.","email":"support@northwind.example","emailHref":"mailto:support@northwind.example","phone":"(02) 8123-4567","phoneHref":"tel:0281234567","address":"1 Harbor Plaza, Harbor City","hours":"Mon – Fri: 8:00 AM – 5:00 PM","hoursNote":"Saturdays and holidays may vary"},"privacy":{"label":"Legal & Data Privacy","heading":"Privacy Policy","intro":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.","effectiveDate":"January 1, 2026","sections":[{"heading":"1. Who we are","body":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris."},{"heading":"2. What data we collect","body":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris."},{"heading":"3. How we use your data","body":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris."},{"heading":"4. Data sharing","body":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris."},{"heading":"5. Data retention","body":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris."},{"heading":"6. Your rights","body":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris."},{"heading":"7. Security","body":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris."},{"heading":"8. Contact us","body":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris."}]},"deletion":{"label":"Account & Data","heading":"Request Account or Data Deletion","intro":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.","whatItMeans":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.","steps":[{"title":"Settle pending transactions","body":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris."},{"title":"Send your request by email","body":"To request account or data deletion, send an email to support@northwind.example with your full name and account number. We will verify your identity before processing."},{"title":"Identity verification","body":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris."},{"title":"Deletion completed","body":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris."}]},"links":{"androidUrl":"#","iosUrl":"#"},"footer":{"trustBadge":"Member NDIC • Insured"},"tokens":{"color-primary":"#0b2a6b","color-primary-mid":"#1746b0","color-accent":"#f5b301","color-accent-lt":"#ffd95e","color-highlight":"#36c5d6","hero-to":"#2f6bff","btn-primary-bg":"#0b2a6b","card-accent":"#f5b301","section-label":"#f5b301"}};</script>
 </head>
 <body class="preload">
 
@@ -674,8 +675,6 @@
       <a href="#about">About</a>
       <a href="#offerings">Offerings</a>
       <a href="#support">Support</a>
-      <a href="#privacy">Privacy</a>
-      <a href="#deletion">Data Deletion</a>
     </nav>
 
     <button class="hamburger" onclick="toggleMenu()" aria-label="Menu">
@@ -687,8 +686,6 @@
     <a href="#about"     onclick="toggleMenu()">About the Bank</a>
     <a href="#offerings" onclick="toggleMenu()">Bank Offerings</a>
     <a href="#support"   onclick="toggleMenu()">Support &amp; Contact</a>
-    <a href="#privacy"   onclick="toggleMenu()">Privacy Policy</a>
-    <a href="#deletion"  onclick="toggleMenu()">Data Deletion</a>
   </div>
 </header>
 
@@ -715,7 +712,7 @@
         <span data-text="hero.pills.0.label">Feature One</span>
       </div>
       <div class="feature-pill">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21V4h5a4.25 4.25 0 0 1 0 8.5H8"/><line x1="5.5" y1="6.5" x2="14" y2="6.5"/><line x1="5.5" y1="10" x2="14" y2="10"/></svg>
         <span data-text="hero.pills.1.label">Feature Two</span>
       </div>
       <div class="feature-pill">
@@ -827,7 +824,7 @@
         <div>
           <h3>Contact Number</h3>
           <p><a href="tel:+10000000000" data-attr-href="support.phoneHref" data-text="support.phone">(000) 000-0000</a></p>
-          <small>Monday – Friday, 8:00 AM – 5:00 PM</small>
+          <small data-text="support.phoneNote"></small>
         </div>
       </div>
 
@@ -839,6 +836,7 @@
           <h3>Head Office Address</h3>
           <p data-text="support.address">123 Lorem Street, City, Country</p>
           <small data-text="brand.name">Company Name</small>
+          <a class="map-link" data-attr-href="support.mapUrl" target="_blank" rel="noopener">View on map ↗</a>
         </div>
       </div>
 
@@ -847,7 +845,7 @@
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
         </div>
         <div>
-          <h3>Business Hours</h3>
+          <h3>Branch Hours</h3>
           <p data-text="support.hours">Mon – Fri: 8:00 AM – 5:00 PM</p>
           <small data-text="support.hoursNote">Saturdays and holidays may vary</small>
         </div>
@@ -857,62 +855,7 @@
 </section>
 
 
-<!-- ══════════════════════════════════════════════════════════════════
-     PRIVACY POLICY
-══════════════════════════════════════════════════════════════════════ -->
-<section class="section" id="privacy">
-  <div class="container">
-    <span class="section-label" data-text="privacy.label">Section Label</span>
-    <h2 data-text="privacy.heading">Privacy Policy</h2>
-    <p data-text="privacy.intro">
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-      incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-      exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-    </p>
-
-    <div class="policy-box">
-      <div class="policy-cta">
-        <p>
-          Read how we collect, use, share, retain, and protect your personal
-          data — and your rights under the Data Privacy Act of 2012 (RA 10173).
-        </p>
-        <button type="button" class="btn-primary" onclick="openPrivacy()">View Privacy Policy</button>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-<!-- ══════════════════════════════════════════════════════════════════
-     DATA DELETION
-     Steps rendered from deletion.steps[]; the request form is built from
-     deletion.form.fields[] by the loader (rudimentary — no backend).
-══════════════════════════════════════════════════════════════════════ -->
-<section class="section section--alt" id="deletion">
-  <div class="container">
-    <span class="section-label" data-text="deletion.label">Account &amp; Data</span>
-    <h2 data-text="deletion.heading">Request Account or Data Deletion</h2>
-    <p data-text="deletion.intro">You may request the deletion of your account and associated data.</p>
-
-    <div class="deletion-note">
-      <strong>What deletion means</strong>
-      <p data-text="deletion.whatItMeans">Deleting your account permanently removes app access.</p>
-    </div>
-
-    <ol class="deletion-steps" data-list="deletion.steps">
-      <template>
-        <li><strong data-text="title">Step</strong><span data-text="body">Detail</span></li>
-      </template>
-    </ol>
-
-    <form class="deletion-form" id="deletionForm" onsubmit="return submitDeletion(event)">
-      <div id="deletionFields"></div>
-      <p class="deletion-disclaimer" data-text="deletion.form.disclaimer">Disclaimer.</p>
-      <button type="submit" class="btn-primary">Submit Request</button>
-      <p class="deletion-success">✓ Your request has been recorded. We'll contact you to verify your identity before processing.</p>
-    </form>
-  </div>
-</section>
+<!-- Privacy Policy & Data Deletion are modals, opened from the footer links. -->
 
 
 <!-- ══════════════════════════════════════════════════════════════════
@@ -928,8 +871,8 @@
       <a href="#about">About the Bank</a>
       <a href="#offerings">Offerings</a>
       <a href="#support">Support &amp; Contact</a>
-      <a href="#privacy">Privacy Policy</a>
-      <a href="#deletion">Data Deletion</a>
+      <a href="#" onclick="openModal('privacyModal'); return false;">Privacy Policy</a>
+      <a href="#" onclick="openModal('deletionModal'); return false;">Data Deletion</a>
       <a href="mailto:support@example.com" data-attr-href="support.emailHref" data-text="support.email">support@example.com</a>
     </div>
   </div>
@@ -954,7 +897,7 @@
   <div class="modal" role="dialog" aria-modal="true" aria-labelledby="pmTitle">
     <div class="modal-head">
       <h3 id="pmTitle" data-text="privacy.heading">Privacy Policy</h3>
-      <button class="modal-close" onclick="closePrivacy()" aria-label="Close">&times;</button>
+      <button class="modal-close" onclick="closeModal(this.closest('.modal-overlay'))" aria-label="Close">&times;</button>
     </div>
     <div class="modal-body">
       <p class="modal-eff" data-text="privacy.effectiveDate"></p>
@@ -966,6 +909,41 @@
           </section>
         </template>
       </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════════════
+     DATA DELETION MODAL
+     Read-only: spiel + "what deletion means" + steps (deletion.steps[]).
+     No form — the request is made by email (see step 2 in the config).
+══════════════════════════════════════════════════════════════════════ -->
+<div class="modal-overlay" id="deletionModal" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="dmTitle">
+    <div class="modal-head">
+      <h3 id="dmTitle" data-text="deletion.heading">Request Account or Data Deletion</h3>
+      <button class="modal-close" onclick="closeModal(this.closest('.modal-overlay'))" aria-label="Close">&times;</button>
+    </div>
+    <div class="modal-body">
+      <p data-text="deletion.intro">You may request the deletion of your account and associated data.</p>
+      <div class="deletion-note">
+        <strong>What deletion means</strong>
+        <p data-text="deletion.whatItMeans">Deleting your account permanently removes app access.</p>
+      </div>
+      <ol class="deletion-steps" data-list="deletion.steps">
+        <template>
+          <li>
+            <strong data-text="title">Step</strong>
+            <span data-text="body">Detail</span>
+            <ul class="deletion-methods" data-list="methods">
+              <template>
+                <li><strong data-text="title">Method</strong><span data-text="body">Detail</span></li>
+              </template>
+            </ul>
+          </li>
+        </template>
+      </ol>
     </div>
   </div>
 </div>
@@ -990,29 +968,25 @@
     }
   });
 
-  // ─── Privacy policy modal ────────────────────────────────────────
-  function openPrivacy() {
-    const m = document.getElementById('privacyModal');
+  // ─── Modals (privacy policy, data deletion) ──────────────────────
+  function openModal(id) {
+    const m = document.getElementById(id);
     if (m) { m.hidden = false; document.body.classList.add('modal-open'); }
   }
-  function closePrivacy() {
-    const m = document.getElementById('privacyModal');
-    if (m) { m.hidden = true; document.body.classList.remove('modal-open'); }
+  function closeModal(m) {
+    if (m) m.hidden = true;
+    // release the scroll lock only when no modal remains open
+    if (!document.querySelector('.modal-overlay:not([hidden])')) {
+      document.body.classList.remove('modal-open');
+    }
   }
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closePrivacy(); });
-  document.addEventListener('click', e => {
-    const m = document.getElementById('privacyModal');
-    if (m && !m.hidden && e.target === m) closePrivacy();  // click on backdrop
+  // Esc closes any open modal; a click on the backdrop closes that overlay.
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') document.querySelectorAll('.modal-overlay:not([hidden])').forEach(closeModal);
   });
-
-  // ─── Data-deletion form (rudimentary — no backend) ───────────────
-  // Records the request client-side and shows a confirmation. Wire to a
-  // real endpoint / mailto when a backend is available.
-  function submitDeletion(e) {
-    e.preventDefault();
-    e.currentTarget.classList.add('sent');
-    return false;
-  }
+  document.addEventListener('click', e => {
+    if (e.target.classList && e.target.classList.contains('modal-overlay')) closeModal(e.target);
+  });
 </script>
 
 <script>
@@ -1065,68 +1039,39 @@
 
     // Repeating lists: <el data-list="path.to.array"><template>…</template></el>
     // For each array item the <template> is cloned; bindings inside resolve
-    // relative to the item (data-text="title" → item.title).
-    function applyLists(data) {
-      document.querySelectorAll('[data-list]').forEach(host => {
-        const arr = getPath(data, host.dataset.list);
-        const tpl = host.querySelector(':scope > template');
-        if (!Array.isArray(arr) || !tpl) return;
-        const frag = document.createDocumentFragment();
-        arr.forEach(item => {
-          const node = tpl.content.cloneNode(true);
-          node.querySelectorAll('[data-text]').forEach(el => {
-            const key = el.dataset.text;
-            // data-text="." (or "") binds the item itself — for arrays of strings.
-            const v = (key === '.' || key === '') ? item : getPath(item, key);
-            if (v != null) el.textContent = v;
-            el.removeAttribute('data-text');
-          });
-          ['href', 'src', 'alt'].forEach(attr => {
-            node.querySelectorAll('[data-attr-' + attr + ']').forEach(el => {
-              const v = getPath(item, el.getAttribute('data-attr-' + attr));
-              if (v != null) el.setAttribute(attr, v);
-              el.removeAttribute('data-attr-' + attr);
-            });
-          });
-          frag.appendChild(node);
+    // relative to the item (data-text="title" → item.title, data-text="." → the
+    // item itself). Nested data-list inside a template resolves against its
+    // parent item, so a step can carry its own sub-list (e.g. deletion methods).
+    function fillList(host, ctx) {
+      const key = host.dataset.list;
+      const arr = (key === '.' || key === '') ? ctx : getPath(ctx, key);
+      const tpl = host.querySelector(':scope > template');
+      if (!Array.isArray(arr) || !tpl) return;
+      const frag = document.createDocumentFragment();
+      arr.forEach(item => {
+        const node = tpl.content.cloneNode(true);
+        node.querySelectorAll('[data-text]').forEach(el => {
+          const k = el.dataset.text;
+          const v = (k === '.' || k === '') ? item : getPath(item, k);
+          if (v != null) el.textContent = v;
+          el.removeAttribute('data-text');
         });
-        host.appendChild(frag);
-      });
-    }
-
-    // Build the account/data-deletion request form from deletion.form.fields[].
-    function renderDeletionForm(data) {
-      const fields = data && data.deletion && data.deletion.form && data.deletion.form.fields;
-      const mount = document.getElementById('deletionFields');
-      if (!mount || !Array.isArray(fields)) return;
-      fields.forEach(f => {
-        const wrap = document.createElement('div');
-        wrap.className = 'field';
-        const id = 'del-' + f.name;
-
-        const label = document.createElement('label');
-        label.setAttribute('for', id);
-        label.textContent = f.label || f.name;
-
-        let input;
-        if (f.type === 'select') {
-          input = document.createElement('select');
-          (f.options || []).forEach(opt => {
-            const o = document.createElement('option');
-            o.value = opt; o.textContent = opt;
-            input.appendChild(o);
+        ['href', 'src', 'alt'].forEach(attr => {
+          node.querySelectorAll('[data-attr-' + attr + ']').forEach(el => {
+            const v = getPath(item, el.getAttribute('data-attr-' + attr));
+            if (v != null) el.setAttribute(attr, v);
+            el.removeAttribute('data-attr-' + attr);
           });
-        } else {
-          input = document.createElement('input');
-          input.type = f.type || 'text';
-        }
-        input.id = id;
-        input.name = f.name;
-
-        wrap.appendChild(label);
-        wrap.appendChild(input);
-        mount.appendChild(wrap);
+        });
+        // recurse into nested lists, scoped to this item
+        node.querySelectorAll('[data-list]').forEach(nested => fillList(nested, item));
+        frag.appendChild(node);
       });
+      host.appendChild(frag);
+    }
+    function applyLists(data) {
+      // top-level lists only; those inside a <template> are handled by recursion
+      document.querySelectorAll('[data-list]').forEach(host => fillList(host, data));
     }
 
     async function resolveConfig() {
@@ -1149,7 +1094,6 @@
           applyTokens(data.tokens);
           applyContent(data);
           applyLists(data);
-          renderDeletionForm(data);
         }
       })
       .catch(err => console.error('[tenant] config load failed, using defaults:', err))

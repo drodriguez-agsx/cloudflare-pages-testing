@@ -365,6 +365,7 @@
     .contact-card p { font-size: 1rem; font-weight: 600; color: var(--color-primary); margin-bottom: 2px; overflow-wrap: anywhere; }
     .contact-card p a { overflow-wrap: anywhere; }
     .contact-card small { font-size: .8rem; color: var(--color-muted); }
+    .contact-card small:empty { display: none; }   /* blank when a tenant has no note */
 
     /* ─── Privacy Policy ───────────────────────────────────────────── */
     #privacy .policy-box {
@@ -484,6 +485,26 @@
       border-top: 1px solid color-mix(in srgb, var(--hero-text) 18%, transparent);
       text-align: left;
     }
+    /* Tagline pull-quote (dramatic flanking quotation marks). */
+    .hero-tagline {
+      text-align: center;
+      font-size: clamp(1.5rem, 4vw, 2.2rem);
+      font-weight: 700;
+      font-style: italic;
+      line-height: 1.3;
+      color: var(--hero-accent-text);
+      max-width: 620px;
+      margin: 4px auto 36px;
+      padding: 0 .2em;
+    }
+    .hero-tagline:empty { display: none; }   /* hidden for tenants without a tagline */
+    .hero-tagline::before, .hero-tagline::after {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 2.4em; font-style: normal; line-height: 0;
+      color: var(--section-label); opacity: .55; vertical-align: -.45em;
+    }
+    .hero-tagline::before { content: '\201C'; margin-right: .04em; }
+    .hero-tagline::after  { content: '\201D'; margin-left: .04em; }
     .hero-about-body p {
       color: var(--hero-subtext);
       font-size: .98rem;
@@ -543,12 +564,12 @@
     .deletion-steps li strong { display: block; color: var(--color-primary); font-size: .95rem; margin-bottom: 2px; }
     .deletion-steps li span { font-size: .9rem; color: var(--color-text-muted); }
     .deletion-form {
-      margin-top: 32px;
+      margin: 32px auto 0;
+      max-width: 560px;
       background: var(--color-surface);
       border-radius: var(--radius);
       padding: 28px;
       box-shadow: var(--shadow);
-      max-width: 520px;
     }
     .deletion-form .field { margin-bottom: 16px; }
     .deletion-form label { display: block; font-size: .85rem; font-weight: 600; color: var(--color-primary); margin-bottom: 6px; }
@@ -730,8 +751,9 @@
    </div>
   </div>
 
-  <!-- About the bank — key facts as a lead-in, then the description. -->
+  <!-- About the bank — tagline pull-quote, key facts, then the description. -->
   <div class="hero-about">
+    <p class="hero-tagline" data-text="hero.tagline"></p>
     <div class="hero-facts">
       <div class="fact">
         <span class="fact-k">Established</span>
@@ -795,7 +817,7 @@
         <div>
           <h3>Support Email</h3>
           <p><a href="mailto:support@example.com" data-attr-href="support.emailHref" data-text="support.email">support@example.com</a></p>
-          <small>Lorem ipsum dolor sit amet</small>
+          <small data-text="support.emailNote"></small>
         </div>
       </div>
 

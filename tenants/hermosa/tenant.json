@@ -14,10 +14,11 @@
 
   "hero": {
     "badge": "Official Mobile Banking App",
-    "headlineLead": "Stay and Grow",
-    "headlineAccent": "with Us",
+    "headlineLead": "Bank Smarter with",
+    "headlineAccent": "RB HERMOSA Mobile",
     "subhead": "Secure, convenient, and fully digital banking for the communities we serve — anytime, anywhere.",
     "image": "hero.png",
+    "tagline": "Stay and Grow with Us",
     "pills": [
       { "label": "Secure Log-in" },
       { "label": "Instant Transfers" },

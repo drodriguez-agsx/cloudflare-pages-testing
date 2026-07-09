@@ -1,22 +1,24 @@
 {
   "meta": {
-    "title": "Acme Bank | Mobile App",
-    "description": "The official Acme Bank mobile app — secure, convenient digital banking."
+    "title": "Acme Bank | Mobile Banking App",
+    "description": "The official Acme Bank mobile banking app — secure, convenient, fully digital banking."
   },
 
   "brand": {
-    "name": "Acme Bank, Inc.",
+    "name": "Acme Bank, Incorporated",
     "shortName": "AB",
-    "tagline": "Your money, simplified",
+    "tagline": "Metro City, Country",
     "location": "Metro City, Country",
-    "logoUrl": "https://YOUR_BUCKET.s3.amazonaws.com/acme/logo.png"
+    "logoUrl": "logo.png"
   },
 
   "hero": {
-    "badge": "Official Mobile App",
+    "badge": "Official Mobile Banking App",
     "headlineLead": "Bank Smarter with",
     "headlineAccent": "Acme Mobile",
-    "subhead": "Secure, convenient, and fully digital banking — anywhere, anytime, 24/7.",
+    "subhead": "Secure, convenient, and fully digital banking — anytime, anywhere.",
+    "image": "hero.png",
+    "tagline": "Your money, simplified",
     "pills": [
       { "label": "Secure Login" },
       { "label": "Instant Transfers" },
@@ -25,17 +27,26 @@
     ]
   },
 
-  "features": {
+  "about": {
+    "paragraphs": [
+      "Acme Bank is committed to delivering accessible, trustworthy financial services to the communities we serve.",
+      "We build lasting relationships with our clients while maintaining full compliance with regulatory standards and good governance."
+    ],
+    "yearEstablished": "1970",
+    "areasServed": "Metro City & nearby"
+  },
+
+  "offerings": {
     "label": "What You Can Do",
-    "heading": "Everything You Need, Right in Your Phone",
-    "intro": "Manage your finances with confidence using the full suite of digital tools in the Acme Mobile app.",
+    "heading": "Bank Offerings",
+    "intro": "Explore the products and services we offer to help you grow and manage your finances.",
     "items": [
-      { "title": "Secure Authentication", "body": "Log in safely using your PIN, biometrics, or two-factor authentication." },
-      { "title": "Fund Transfers",        "body": "Transfer funds instantly to other accounts or external banks — fast and reliable." },
-      { "title": "Account Overview",      "body": "View balances, transaction history, and e-statements anytime, anywhere." },
-      { "title": "Bills Payment",         "body": "Pay utility bills and other obligations directly through the app." },
-      { "title": "24/7 Support",          "body": "Access in-app support, FAQs, and direct contact channels day or night." },
-      { "title": "Trusted Security",      "body": "Bank-grade security and regulatory compliance keep your deposits protected." }
+      { "title": "Deposit Accounts", "body": "Insured savings and checking accounts for everyday banking." },
+      { "title": "Fund Transfers",   "body": "Send money instantly to other accounts and external banks." },
+      { "title": "Bills Payment",    "body": "Pay utilities and other billers directly from the app." },
+      { "title": "Loans",            "body": "Flexible financing for homes, vehicles, business, and personal needs." },
+      { "title": "Account Overview", "body": "View balances, transaction history, and e-statements anytime." },
+      { "title": "24/7 Support",     "body": "Access in-app support, FAQs, and contact channels day or night." }
     ]
   },
 
@@ -43,8 +54,9 @@
     "label": "App Support & Contact",
     "heading": "We're Here to Help",
     "intro": "For any questions, concerns, or technical issues with the app, reach out through any channel below.",
-    "email": "support@acmebank.com",
-    "emailHref": "mailto:support@acmebank.com",
+    "email": "support@acmebank.example",
+    "emailHref": "mailto:support@acmebank.example",
+    "emailNote": "",
     "phone": "(02) 8123-4567",
     "phoneHref": "tel:+63281234567",
     "address": "123 Main Street, Metro City, Country",
@@ -55,16 +67,50 @@
   "privacy": {
     "label": "Legal & Data Privacy",
     "heading": "Privacy Policy",
-    "intro": "Acme Bank is committed to protecting the privacy and security of all information you share with us.",
-    "fullPolicyUrl": "https://acmebank.com/privacy"
+    "intro": "Acme Bank is committed to protecting the privacy and security of the information you share with us.",
+    "effectiveDate": "January 1, 2026",
+    "sections": [
+      { "heading": "1. Who we are",             "body": "Who operates the app, the bank's license/regulator, and how to reach you about this policy." },
+      { "heading": "2. What data we collect",   "body": "The categories of account, transaction, device, and usage data the app collects." },
+      { "heading": "3. How we use your data",   "body": "The purposes: opening accounts, processing transactions, compliance checks, fraud prevention, notifications." },
+      { "heading": "4. Data sharing",           "body": "Who you share data with (processors, clearing partners, regulators) and on what basis." },
+      { "heading": "5. Data retention",         "body": "How long data is kept and the legal basis for the retention period." },
+      { "heading": "6. Your rights",            "body": "The data-subject rights available and how to exercise them." },
+      { "heading": "7. Security",               "body": "Encryption, access controls, and auditing measures that protect the data." },
+      { "heading": "8. Contact us",             "body": "Full contact details, including the Data Privacy Officer." }
+    ]
+  },
+
+  "deletion": {
+    "label": "Account & Data",
+    "heading": "Request Account or Data Deletion",
+    "intro": "You may request the deletion of your account and the personal data associated with it. Please read the information below before submitting.",
+    "whatItMeans": "Deleting your account permanently removes your app access. Transaction records may be retained for a period required by law.",
+    "steps": [
+      { "title": "Settle pending transactions", "body": "Ensure no pending transfers, payments, or loan obligations remain." },
+      { "title": "Submit this form",            "body": "Fill out the request form below. We verify your identity before processing." },
+      { "title": "Identity verification",       "body": "Our team contacts you within 3 business days to confirm your identity." },
+      { "title": "Deletion completed",          "body": "Your app account and non-regulated data are deleted within 15 business days." }
+    ],
+    "form": {
+      "fields": [
+        { "name": "fullName",      "label": "Full name",          "type": "text" },
+        { "name": "accountNumber", "label": "Account number",     "type": "text" },
+        { "name": "email",         "label": "Registered email",   "type": "email" },
+        { "name": "reason",        "label": "Reason for deletion", "type": "select",
+          "options": ["No longer using the app", "Privacy concerns", "Switching to another bank", "Other"] }
+      ],
+      "disclaimer": "By submitting, you confirm that you are the registered account holder."
+    }
   },
 
   "links": {
-    "androidUrl": "https://play.google.com/store/apps/details?id=com.acmebank.app"
+    "androidUrl": "",
+    "iosUrl": ""
   },
 
   "footer": {
-    "trustBadge": "Member ABC • Deposits Insured"
+    "trustBadge": "Regulated by the BSP • Deposits insured by PDIC"
   },
 
   "tokens": {
@@ -73,8 +119,27 @@
     "color-accent": "#f5c400",
     "color-accent-lt": "#ffe066",
     "color-highlight": "#2ec4da",
+    "color-bg": "#f5f7fa",
+    "color-surface": "#ffffff",
 
+    "header-bg": "#0b1f5c",
+    "header-text": "#ffffff",
+    "header-subtitle": "#ffe066",
+    "header-nav": "rgba(255,255,255,0.8)",
+    "logo-size": "52px",
+    "logo-text-display": "block",
+
+    "hero-from": "#0b1f5c",
     "hero-to": "#1a4fc8",
+    "hero-text": "#ffffff",
+    "hero-subtext": "rgba(255,255,255,0.8)",
+    "hero-accent-text": "#ffe066",
+    "hero-badge-bg": "#f5c400",
+    "hero-badge-text": "#0b1f5c",
+    "pill-bg": "rgba(255,255,255,0.1)",
+    "pill-text": "#ffffff",
+
+    "section-label": "#f5c400",
     "btn-primary-bg": "#0b1f5c",
     "card-accent": "#f5c400"
   }

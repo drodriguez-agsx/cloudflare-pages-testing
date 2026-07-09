@@ -19,14 +19,13 @@ contact details — all driven by data.
 │   ├── index.html          #   Tenant gallery (links to each /<slug>/)
 │   └── hermosa/            #   Baked, self-contained tenant bundle
 ├── tenant.example.json     # Reference config — copy this per tenant (dev-only, not deployed)
-├── palette-reference.jpg   # Design reference (dev-only, not deployed)
 ├── docs/                   # RFCs and design notes (dev-only, not deployed)
 └── README.md
 ```
 
 > **What gets deployed:** only the contents of `public/` (static assets) plus the
 > `functions/` directory (resolved from the repo root, not the output dir).
-> Everything else — `docs/`, `tenant.example.json`, `palette-reference.jpg`,
+> Everything else — `docs/`, `tenant.example.json`,
 > this README — stays in the repo but is **never served**. To make a file
 > publicly reachable, it must live under `public/`.
 
